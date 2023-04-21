@@ -21,17 +21,9 @@ const Login = () =>{
                                                 <input type="password" className="form-control form-control-user"
                                                     id="exampleInputPassword" placeholder="Password"/>
                                             </div>
-                                            {/* <div className="form-group">
-                                                <div className="custom-control custom-checkbox small">
-                                                    <input type="checkbox" className="custom-control-input" id="customCheck"/>
-                                                    <label className="custom-control-label" for="customCheck">Remember
-                                                        Me</label>
-                                                </div>
-                                            </div> */}
                                             <a href="index.html" className="btn btn-primary btn-user btn-block">
                                                 Login
                                             </a>
-                                            
                                         </form>
                                         <hr/>
                                         <div className="text-center">

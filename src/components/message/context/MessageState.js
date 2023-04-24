@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MessageContext from "./MessageContext";
 const MessageState = (props)=>{
-    const {message, setMessage} = useState(null);
+    const [message, setMessage] = useState(null);
     const showMessage = (message)=>{
         setMessage({
             message: message.message,

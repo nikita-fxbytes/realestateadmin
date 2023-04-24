@@ -8,6 +8,7 @@ import Header from './components/layouts/Header';
 import UserRoutes from "./modules/user/UserRoutes";
 import Login from './pages/auth/Login';
 import MessageState from "./components/message/context/MessageState";
+import Message from "./components/message/Message";
 function App() {
   return (
     <MessageState>
@@ -18,6 +19,7 @@ function App() {
           <div id="content">
             <Header/>
             <div className="container-fluid">
+              <Message/>
               <Routes>
                 <Route path="/" element={<Login/>}></Route>
                 <Route path="dashboard" element={<DashBoard/>}></Route>

@@ -6,8 +6,8 @@ const RoleRoutes = () => {
   return (
     <Routes>
         <Route path="/" element={<Role/>}></Route>
-        <Route path="roles/create" element={<RoleCreate/>}></Route>
-        <Route path="roles/edit/:id" element={<RoleEdit/>}></Route>
+        <Route path="/create" element={<RoleCreate/>}></Route>
+        <Route path="/edit/:id" element={<RoleEdit/>}></Route>
     </Routes>
   )
 }

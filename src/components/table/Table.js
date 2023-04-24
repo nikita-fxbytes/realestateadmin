@@ -13,21 +13,21 @@ const Table = ({heading, header, rowData, path}) => {
             </div>
             <div className="card-body">
                 <div className="table-responsive">
-                    <table className="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table className="table table-bordered" id="dataTable" width="100%" cellpacing="0">
                         <thead>
                             <tr>
-                                {header.map((head, index) => (
-                                    <th key={index}>{head}</th>
-                                ))}  
+                                {header.map((col, index) => (
+                                    <th key={index} className={col.align}>{col.text}</th>
+                                ))} 
                             </tr>
                         </thead>
                         <tbody>
                         {rowData.map((row, index) => (
-                        <tr key={index}>
-                            <td >{row.name}</td>
-                            <td >{row.age}</td>
-                            <td >{row.email}</td>
-                        </tr>
+                            <tr key={index}>
+                            {row.map((cell, index) => (
+                                <td key={index} className={cell.align}>{cell.text}</td>
+                            ))}
+                            </tr>
                         ))}
                         </tbody>
                     </table>

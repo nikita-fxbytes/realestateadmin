@@ -5,7 +5,7 @@ import UserMessage from '../../helper/message/UserMessage';
 import { useContext, useEffect, useState } from "react";
 import MessageContext from "../../components/message/context/MessageContext";
 import api from "../../api/Api";
-import { userValidaions } from "../../helper/Validation";
+import { userValidaions } from "./Validation";
 const CreateUser = () => {
   const path = '/users';
   const rolePath = '/roles'
@@ -93,6 +93,7 @@ const CreateUser = () => {
       }
       
     } catch (error) {
+      setLoader(false);
       const message = error.response.data.message;
       showMessage({
         message: message,
@@ -136,7 +137,7 @@ const CreateUser = () => {
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group mb-2">
                     <label>{password}<span className="text-danger">*</span></label>
-                    <input type="password" className="form-control form-control-user" placeholder={enter_password} name='password' onChange={handleChange} value={formValues.password}/>
+                    <input type="password" className="form-control form-control-user" placeholder={enter_password} name='password' onChange={handleChange} value={formValues.password} autoComplete="password"/>
                     {errors.password && <label className="text-danger mb-0"> {errors.password}</label>}
                   </div>              
                 </div>
@@ -169,5 +170,4 @@ const CreateUser = () => {
     </>
   )
 }
-
-export default CreateUser
+export default CreateUser;

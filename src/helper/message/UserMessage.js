@@ -20,7 +20,8 @@ const UserMessage = {
     password_cannot_more_than_characters: "Password cannot be more than 16 characters",
     password_formate: "Password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long",
     role_required: "Role is required",
-    name_more_than_characters: "Name must be more than 3 characters"
+    name_more_than_characters: "Name must be more than 3 characters",
+    delete_user_message: 'Are you sure you want to delete this user?'
 
 }
 export default UserMessage;

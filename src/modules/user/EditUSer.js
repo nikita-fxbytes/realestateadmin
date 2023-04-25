@@ -5,7 +5,7 @@ import UserMessage from '../../helper/message/UserMessage';
 import { useContext, useEffect, useState } from "react";
 import MessageContext from "../../components/message/context/MessageContext";
 import api from "../../api/Api";
-import { userValidaions } from "../../helper/Validation";
+import { editUserValidaions } from "./Validation";
 const EditUSer = () => {
   const path = '/users';
   const rolePath = '/roles';
@@ -24,6 +24,7 @@ const EditUSer = () => {
   // Get role
   useEffect(()=>{
     getRoles();
+    getUser(id);
   },[])
   // End
   // Get role Api
@@ -54,7 +55,7 @@ const EditUSer = () => {
       const resData = res.data;
       if(resData.status === true){
         // setLoader(false);
-        setFormValues(resData.role)
+        setFormValues(resData.user)
       }
     } catch (error) {
       setLoader(false)
@@ -89,7 +90,7 @@ const EditUSer = () => {
   // Submit Form
   const handleSubmit = (e) =>{
     e.preventDefault();
-    const errors = userValidaions(formValues);
+    const errors = editUserValidaions(formValues);
     setErrors(errors);
     if(Object.keys(errors).length ===0){
       const {name, email, mobile, password, roleId } = formValues;
@@ -157,14 +158,14 @@ const EditUSer = () => {
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group mb-2">
                     <label>{password}<span className="text-danger">*</span></label>
-                    <input type="password" className="form-control form-control-user" placeholder={enter_password} name='password' onChange={handleChange} value={formValues.password}/>
+                    <input type="password" className="form-control form-control-user" placeholder={enter_password} name='password' onChange={handleChange} autoComplete="password"/>
                     {errors.password && <label className="text-danger mb-0"> {errors.password}</label>}
                   </div>              
                 </div>
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group mb-0">
                     <label>{role}<span className="text-danger">*</span></label>
-                    <select className="form-control" name="roleId" onChange={handleChange}>
+                    <select className="form-control" value={formValues.roleId} name="roleId" onChange={handleChange}>
                       <option>{select_role}</option>
                       {roles && roles.length>0 ?
                        roles.map((role)=>(

@@ -12,4 +12,4 @@ const UserRoutes = () => {
   )
 }
 
-export default UserRoutes
+export default UserRoutes;

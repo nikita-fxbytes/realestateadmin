@@ -1,5 +1,6 @@
 import CommonMessage from "./message/CommonMessage";
-// ROle validation
+import UserMessage from "./message/UserMessage";
+// Role validation
 export const roleValidation =(values)=>{
     const {name_required} =CommonMessage
     const errors = {};
@@ -10,40 +11,46 @@ export const roleValidation =(values)=>{
 }
 // End
 
-// ROle validation
+// User validation
 export const userValidaions =(values)=>{
-  const {name_required} =CommonMessage
+  const {name_required} =CommonMessage;
+  const { name_more_than_characters, email_required, email_format, mobile_required, mobile_more_than_characters, mobile_cannot_more_than_characters, password_required, password_more_than_characters, password_cannot_more_than_characters, password_formate, role_required } = UserMessage
   const errors = {};
-  const regex = /^[^\\$@]+@[^\\$@]+\\.[^\\$@]{2,}$/i;
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+   const regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
   // Name
   if (!values.name){
     errors.name = name_required
+  }else if(values.name.length <3){
+    errors.name = name_more_than_characters
   }
-  // email
+  // Email
   if(!values.email){
-    errors.email= "Email is required!";
+    errors.email= email_required;
   }else if(!regex.test(values.email)){
-      errors.email = "This is not a valid email format!";
+    errors.email = email_format;
   }
   // Mobile
   if(!values.mobile){
-    errors.mobile= "Mobile is required!";
-  } else if(values.mobile.length <10){
-      errors.mobile = "Mobile must be more than 10 characters";
+    errors.mobile= mobile_required;
+  } else if(values.mobile.length<10){
+      errors.mobile = mobile_more_than_characters;
   } else if(values.mobile.length >15){
-    errors.mobile = "Mobile cannot be more than 15 characters";
+    errors.mobile = mobile_cannot_more_than_characters;
 } 
   // Password
   if(!values.password){
-    errors.password= "Password is required!";
-  } else if(values.password.length<6){
-      errors.password = "Password must be more than 4 characters";
+    errors.password= password_required;
+  } else if(values.password.length<8){
+      errors.password = password_more_than_characters;
   } else if(values.password.length>16){
-      errors.password = "Password cannot be more than 16 characters";
+      errors.password = password_cannot_more_than_characters;
+  }else if(!regexPassword.test(values.password)){
+    errors.password = password_formate;
   }
   //Role
   if (!values.roleId){
-    errors.roleId = name_required
+    errors.roleId = role_required;
   }
   return errors;
 }

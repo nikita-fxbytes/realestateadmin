@@ -8,6 +8,7 @@ import api from "../../api/Api";
 import { userValidaions } from "../../helper/Validation";
 const CreateUser = () => {
   const path = '/users';
+  const rolePath = '/roles'
   const navigate = useNavigate();
   // Common Message
   const {enter_name, submit, cancel, name, role, select_role, success, danger} = CommonMessage;
@@ -28,7 +29,7 @@ const CreateUser = () => {
   const getRoles = async() =>{
     // setLoader(true);
     try {
-      const res = await api.get('/roles')
+      const res = await api.get(rolePath)
       const resData = res.data;
       if(resData.status === true){
         // setLoader(false);
@@ -53,19 +54,22 @@ const CreateUser = () => {
     roleId: ''
   }
   const [formValues, setFormValues] = useState(intialValues);
-  const [errors, SetErrors] = useState({});//Error
+  const [errors, setErrors] = useState({});//Error
   // End
   // Input change
   const handleChange = (e) =>{
     const{name, value} = e.target;
     setFormValues({...formValues, [name]: value});
+    if (Object.keys(errors).length > 0) {
+      setErrors({ ...errors, [name]: '' });
+    }
   }
   // End
   // Submit Form
   const handleSubmit = (e) =>{
     e.preventDefault();
     const errors = userValidaions(formValues);
-    SetErrors(errors);
+    setErrors(errors);
     if(Object.keys(errors).length ===0){
       const {name, email, mobile, password, roleId } = formValues;
       const user = {name, email, mobile, password, roleId}
@@ -97,7 +101,6 @@ const CreateUser = () => {
     }
   }
   // End
-
 
   return (
     <>
@@ -133,14 +136,14 @@ const CreateUser = () => {
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group mb-2">
                     <label>{password}<span className="text-danger">*</span></label>
-                    <input type="password" className="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder={enter_password} name='password' onChange={handleChange} value={formValues.password}/>
+                    <input type="password" className="form-control form-control-user" placeholder={enter_password} name='password' onChange={handleChange} value={formValues.password}/>
                     {errors.password && <label className="text-danger mb-0"> {errors.password}</label>}
                   </div>              
                 </div>
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group mb-0">
                     <label>{role}<span className="text-danger">*</span></label>
-                    <select className="form-control">
+                    <select className="form-control" name="roleId" onChange={handleChange}>
                       <option>{select_role}</option>
                       {roles && roles.length>0 ?
                        roles.map((role)=>(
@@ -149,6 +152,7 @@ const CreateUser = () => {
                         :
                         ''}
                     </select>
+                    {errors.roleId && <label className="text-danger mb-0"> {errors.roleId}</label>}
                   </div>              
                 </div>
               </div>

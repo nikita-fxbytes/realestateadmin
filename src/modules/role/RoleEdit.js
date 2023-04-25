@@ -66,11 +66,8 @@ const RoleEdit = () => {
   // Edit Role
   const editRole = async(formValues) =>{
     setLoader(true);
-    const {name} = formValues;
-    // API call
-    const role = { name } 
     try {
-      const res = await api.put(`${path}/${id}`, role)
+      const res = await api.put(`${path}/${id}`, formValues)
       const resData = res.data;
       console.log(resData.message)
       if(resData.status === true){

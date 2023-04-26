@@ -1,5 +1,4 @@
-import CommonMessage from "./message/CommonMessage";
-import UserMessage from "./message/UserMessage";
+import CommonMessage from "../../helper/message/CommonMessage";
 // Role validation
 export const roleValidation =(values)=>{
     const {name_required} =CommonMessage

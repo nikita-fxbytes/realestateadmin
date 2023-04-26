@@ -4,7 +4,7 @@ import CommonMessage from "../../helper/message/CommonMessage";
 import { useContext, useState } from "react";
 import MessageContext from '../../components/message/context/MessageContext'
 import api from '../../api/Api';
-import { roleValidation } from "../../helper/Validation";
+import { roleValidation } from "./RoleValidation";
 const RoleCreate = () => {
   const path = '/roles';
   const navigate = useNavigate();  //redirect another page
@@ -18,20 +18,24 @@ const RoleCreate = () => {
   const intialValues = {
     name: ''
   }
-  const [formValues, setFormValue] = useState(intialValues)
+  const [formValues, setFormValue] = useState(intialValues);
   // End
-  const [error, setError] = useState({});// Error
+  const [errors, setErrors] = useState({});// Error
+
   // input change value
   const handleChange = (e) =>{
     const {name, value} = e.target;
     setFormValue({...formValues, [name]: value});
+    if (Object.keys(errors).length > 0) {
+      setErrors({ ...errors, [name]: '' });
+    }
   }
   // End
   // Form Submit
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = roleValidation(formValues)
-    setError(errors);
+    setErrors(errors);
     if (Object.keys(errors).length === 0) {
       const {name} = formValues;
       const role = { name };
@@ -39,14 +43,11 @@ const RoleCreate = () => {
     }
   }
   // End
-  // Add Role
+  // Add role api
   const addRole = async(formValues) =>{
     setLoader(true);
-    const {name} = formValues;
-    // API call
-    const role = { name } 
     try {
-      const res = await api.post(path, role)
+      const res = await api.post(path, formValues)
       const resData = res.data;
       if(resData.status === true){
         setLoader(false)
@@ -85,7 +86,7 @@ const RoleCreate = () => {
                   <div className="form-group mb-0">
                     <label>{name}<span className="text-danger">*</span></label>
                     <input type="text" className="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" name="name" placeholder={enter_name} value={formValues.name} onChange={handleChange}/>
-                    {error.name && <label className="text-danger mb-0"> {error.name}</label>}
+                    {errors.name && <label className="text-danger mb-0"> {errors.name}</label>}
                   </div>              
                 </div>
               </div>

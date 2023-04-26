@@ -4,58 +4,63 @@ import CommonMessage from "../../helper/message/CommonMessage";
 import { useContext, useEffect, useState } from "react";
 import MessageContext from '../../components/message/context/MessageContext'
 import api from '../../api/Api';
-import { roleValidation } from "../../helper/Validation";
+import { roleValidation } from "./RoleValidation";
 const RoleEdit = () => {
-  const path = '/roles';
-  const { id } = useParams();
+  const path = '/roles';//Base url
+  const { id } = useParams();//Get id
   const navigate = useNavigate();  //redirect another page
-  const {edit_role, enter_name, update, cancel, name} = CommonMessage;
+  const {edit_role, enter_name, update, cancel, name, danger, success} = CommonMessage;//Message
 
   const {showMessage} = useContext(MessageContext);  //show message
 
-  const [loader, setLoader]= useState(false)// lodader
-
+  const [loader, setLoader]= useState(false)// loder
+  //Get role 
+  useEffect(()=>{
+    getRole(id)
+  },[]);
+  // End
+  // Get role
+  const getRole = async(roleId) =>{
+    setLoader(true);
+    try {
+      const res = await api.get(`${path}/${roleId}`)
+      const resData = res.data;
+      if(resData.status === true){
+        setLoader(false);
+        setFormValue(resData.role)
+      }
+    } catch (error) {
+      setLoader(false)
+      const message = error.response.data.message;
+        showMessage({
+            message:message,
+            type: danger
+        });
+    }
+  }
+  // End
   // Form value
   const intialValues = {
     name: ''
   }
   const [formValues, setFormValue] = useState(intialValues)
   // End
-  const [error, setError] = useState({});// Error
+  const [errors, setErrors] = useState({});// Error
   // input change value
   const handleChange = (e) =>{
     const {name, value} = e.target;
     setFormValue({...formValues, [name]: value});
+    if (Object.keys(errors).length > 0) {
+      setErrors({ ...errors, [name]: '' });
+    }
   }
   // End
-  useEffect(()=>{
-    getRole(id)
-  },[])
-    // Get Role
-    const getRole = async(roleId) =>{
-      // setLoader(true);
-      try {
-        const res = await api.get(`${path}/${roleId}`)
-        const resData = res.data;
-        if(resData.status === true){
-          // setLoader(false);
-          setFormValue(resData.role)
-        }
-      } catch (error) {
-        setLoader(false)
-        const message = error.response.data.message;
-          showMessage({
-              message:message,
-              type:'danger'
-          });
-      }
-    }
-    // End
+  
   // Form Submit
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = roleValidation(formValues)
-    setError(errors);
+    setErrors(errors);
     if (Object.keys(errors).length === 0) {
       const {name} = formValues;
       const role = { name };
@@ -63,7 +68,7 @@ const RoleEdit = () => {
     }
   }
   // End
-  // Edit Role
+  // Edit Role api
   const editRole = async(formValues) =>{
     setLoader(true);
     try {
@@ -74,17 +79,16 @@ const RoleEdit = () => {
         setLoader(false)
         showMessage({
             message:resData.message,
-            type:'success'
+            type: success
           });
           navigate(path);
       }
     } catch (error) {
-      console.log(error)
       setLoader(false)
       const message = error.response.data.message;
         showMessage({
             message:message,
-            type:'danger'
+            type: danger
         });
     }
   }
@@ -106,7 +110,7 @@ const RoleEdit = () => {
                   <div className="form-group mb-0">
                     <label>{name}<span className="text-danger">*</span></label>
                     <input type="text" className="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" name="name" placeholder={enter_name} value={formValues.name} onChange={handleChange}/>
-                    {error.name && <label className="text-danger mb-0"> {error.name}</label>}
+                    {errors.name && <label className="text-danger mb-0"> {errors.name}</label>}
                   </div>              
                 </div>
               </div>

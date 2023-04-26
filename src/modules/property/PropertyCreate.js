@@ -1,37 +1,49 @@
-import { Link, useNavigate } from "react-router-dom";
+import MessageContext from "../../components/message/context/MessageContext";
 import PageHeading from "../../components/pageheading/PageHeading";
 import CommonMessage from "../../helper/message/CommonMessage";
-import PropertyMessage from '../../helper/message/PropertyMessage';
-import MessageContext from "../../components/message/context/MessageContext";
-import { useContext, useEffect, useState } from "react";
-import api from "../../api/Api";
 import { propertiesValidaions } from "./PropertyValidations";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import PropertyMessage from './PropertyMessage';
+import api from "../../api/Api";
 const PropertyCreate = () => {
-  const {enter_name, submit, cancel, name, danger, success} = CommonMessage;
-  const {add_a_new_property, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor} = PropertyMessage;
+  // Base path
   const path = '/properties';
-  const userPath = '/users'
+  const userPath = '/users';
+  // End
+
+  // Redirect url
   const navigate = useNavigate();
+  // End
+
   const {showMessage} = useContext(MessageContext);//Show message
-  const [loader, setLoader] = useState(false);//Loader
-  const [users, setUsers] = useState([]); //roles
-  // Get role
+
+  //Messages 
+  const {enter_name, submit, cancel, name, danger, success} = CommonMessage;
+  const {add_a_new_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor} = PropertyMessage;
+  // End
+  
+  const [userLoader, setUserLoader] = useState(false);//Loader
+
+  const [users, setUsers] = useState([]); //User loader
+
+  // Get user
   useEffect(()=>{
-    getUser();
+    getUsers();
   },[]);
   // End
-  // Get role Api
-  const getUser = async() =>{
-    // setLoader(true);
+  // Get user api
+  const getUsers = async() =>{
+    setUserLoader(true);
     try {
       const res = await api.get(`${userPath}?roleName=propertyrealtor`)
       const resData = res.data;
       if(resData.status === true){
-        // setLoader(false);
+        setUserLoader(false);
         setUsers(resData.users)
       }
     } catch (error) {
-      // setLoader(false)
+      setUserLoader(false)
       const message = error.response.data.message;
         showMessage({
             message: message,
@@ -40,7 +52,9 @@ const PropertyCreate = () => {
     }
   }
   // End
+
   // Form value
+  const [loader, setLoader] = useState(false);//Form loader
   const intialValues = {
     name: '',
     price: '',
@@ -54,6 +68,7 @@ const PropertyCreate = () => {
   const [formValues, setFormValues] = useState(intialValues);
   const [errors, setErrors] = useState({});//Error
   // End
+
   // Input change
   const handleChange = (e) =>{
     const{name, value} = e.target;
@@ -75,7 +90,7 @@ const PropertyCreate = () => {
     }
   }
   // End
-  // Add user api
+  // Add property api
   const addProperty = async(formValues) => {
     setLoader(true);
     try {
@@ -91,6 +106,7 @@ const PropertyCreate = () => {
       }
       
     } catch (error) {
+      setLoader(false);
       const message = error.response.data.message;
       showMessage({
         message: message,
@@ -99,7 +115,6 @@ const PropertyCreate = () => {
     }
   }
   // End
-
   return (
     <>
       <PageHeading heading={add_a_new_property}/>
@@ -109,69 +124,78 @@ const PropertyCreate = () => {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="card-body">
-              <div className="row">
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{name}<span className="text-danger">*</span></label>
-                    <input type="text" className="form-control form-control-user" name="name" placeholder={enter_name} onChange={handleChange}/>
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{price}<span className="text-danger">*</span></label>
-                    <input type="text" className="form-control form-control-user" name="price" placeholder={enter_price} onChange={handleChange}/>
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{location}</label>
-                    <input type="text" className="form-control form-control-user" name="location" placeholder={enter_location} onChange={handleChange}/>
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{squareFeet}</label>
-                    <input type="text" className="form-control form-control-user" name="squareFeet" placeholder={enter_square_feet} onChange={handleChange}/>
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{garage}</label>
-                    <input type="text" className="form-control form-control-user" name="garage" placeholder={enter_garage} onChange={handleChange}/>
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{bedrooms}</label>
-                    <input type="text" className="form-control form-control-user" name="bedrooms" placeholder={enter_bedrooms} onChange={handleChange}/>
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-0">
-                    <label>{bathrooms}</label>
-                    <input type="text" className="form-control form-control-user" name="bathrooms" placeholder={enter_bathrooms} onChange={handleChange}/>
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-0">
-                    <label>{propertyRealtor}<span className="text-danger">*</span></label>
+            <div className="row">
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{name}<span className="text-danger">*</span></label>
+                  <input type="text" className="form-control form-control-user" name="name" placeholder={enter_name} onChange={handleChange}/>
+                  {errors.name && <label className="text-danger mb-0"> {errors.name}</label>}
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{price}<span className="text-danger">*</span></label>
+                  <input type="number" className="form-control form-control-user" name="price" placeholder={enter_price} onChange={handleChange}/>
+                  {errors.price && <label className="text-danger mb-0"> {errors.price}</label>}
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{location}</label>
+                  <input type="text" className="form-control form-control-user" name="location" placeholder={enter_location} onChange={handleChange}/>
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{square_feet}</label>
+                  <input type="number" className="form-control form-control-user" name="squareFeet" placeholder={enter_square_feet} onChange={handleChange}/>
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{garage}</label>
+                  <input type="number" className="form-control form-control-user" name="garage" placeholder={enter_garage} onChange={handleChange}/>
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{bedrooms}</label>
+                  <input type="number" className="form-control form-control-user" name="bedrooms" placeholder={enter_bedrooms} onChange={handleChange}/>
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-0">
+                  <label>{bathrooms}</label>
+                  <input type="number" className="form-control form-control-user" name="bathrooms" placeholder={enter_bathrooms} onChange={handleChange}/>
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-0">
+                  <label>{property_realtor}<span className="text-danger">*</span></label>
+                  <div className="d-flex align-items-center ">
                     <select className="form-control" name="propertyRealtor" onChange={handleChange}>
                       <option>{select_property_realtor}</option>
                       {users && users.length>0 ?
-                       users.map((user)=>(
+                      users.map((user)=>(
                         <option value={user._id} key={user._id}>{user ? user.name:''}</option>
-                       ))
+                      ))
                         :
                         ''}
                     </select>
-                    {errors.roleId && <label className="text-danger mb-0"> {errors.propertyRealtor}</label>}
-                  </div>              
-                </div>
+                    {userLoader && <span className="spinner-border spinner-border-sm ml-n3"></span>}
+                  </div>
+                  
+                  {errors.propertyRealtor && <label className="text-danger mb-0"> {errors.propertyRealtor}</label>}
+                </div>              
               </div>
+            </div>
           </div>
           <div className="card-footer">
             <Link to='/properties' className="btn btn-outline-primary mr-2">{cancel}</Link>
-            <button type="submit" className="btn btn-primary btn-user">{submit}</button>
+            <button type="submit" className="btn btn-primary btn-user" disabled={loader}>
+              {loader && <span className="spinner-border spinner-border-sm me-1"></span>}
+              {submit}
+            </button>
           </div>
         </form>
       </div>

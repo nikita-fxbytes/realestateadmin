@@ -6,7 +6,7 @@ import Sidebar from './components/layouts/Sidebar';
 import Footer from './components/layouts/Footer';
 import Header from './components/layouts/Header';
 import UserRoutes from "./modules/user/UserRoutes";
-import Login from './pages/auth/Login';
+import Login from './pages/auth/login/Login';
 import MessageState from "./components/message/context/MessageState";
 import Message from "./components/message/Message";
 function App() {

@@ -1,26 +1,31 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
-import PageHeading from "../../components/pageheading/PageHeading";
-import CommonMessage from "../../helper/message/CommonMessage";
-import UserMessage from '../../helper/message/UserMessage';
-import { useContext, useEffect, useState } from "react";
 import MessageContext from "../../components/message/context/MessageContext";
-import api from "../../api/Api";
+import PageHeading from "../../components/pageheading/PageHeading";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import CommonMessage from "../../helper/message/CommonMessage";
+import { useContext, useEffect, useState } from "react";
 import { editUserValidaions } from "./Validation";
+import UserMessage from './UserMessage';
+import api from "../../api/Api";
+
 const EditUSer = () => {
+  // Base url
   const path = '/users';
   const rolePath = '/roles';
-  const { id } = useParams();
-  const navigate = useNavigate();
-  // Common Message
-  const {enter_name, submit, cancel, name, role, select_role, success, danger} = CommonMessage;
   // End
-  // User Message
+
+  const { id } = useParams();//Get id
+  const navigate = useNavigate();//redirect api
+  const {showMessage} = useContext(MessageContext);//Show message
+
+  //Message
+  const {enter_name, submit, cancel, name, role, select_role, success, danger} = CommonMessage;
   const {edit_user, enter_email, enter_mobile, email, mobile, password, enter_password} = UserMessage;
   // End
 
-  const {showMessage} = useContext(MessageContext);//Show message
-  const [loader, setLoader] = useState(false);//Loader
-  const [roles, setRoles] = useState([]); //roles
+ 
+  const [roleLoader, setRoleLoader] = useState(false);// Role loader
+  const [roles, setRoles] = useState([]); //Roles 
+
   // Get role
   useEffect(()=>{
     getRoles();
@@ -29,16 +34,16 @@ const EditUSer = () => {
   // End
   // Get role Api
   const getRoles = async() =>{
-    // setLoader(true);
+    setRoleLoader(true);
     try {
       const res = await api.get(rolePath)
       const resData = res.data;
       if(resData.status === true){
-        // setLoader(false);
+        setRoleLoader(false);
         setRoles(resData.roles)
       }
     } catch (error) {
-      // setLoader(false)
+      setRoleLoader(false)
       const message = error.response.data.message;
         showMessage({
             message: message,
@@ -47,14 +52,15 @@ const EditUSer = () => {
     }
   }
   // End
-   // Get Role
+   // Get User
+   const [loader, setLoader] = useState(false);//Loader
    const getUser = async(userId) =>{
-    // setLoader(true);
+    setLoader(true);
     try {
       const res = await api.get(`${path}/${userId}`)
       const resData = res.data;
       if(resData.status === true){
-        // setLoader(false);
+        setLoader(false);
         setFormValues(resData.user)
       }
     } catch (error) {
@@ -62,7 +68,7 @@ const EditUSer = () => {
       const message = error.response.data.message;
         showMessage({
             message:message,
-            type:'danger'
+            type: danger
         });
     }
   }
@@ -99,7 +105,7 @@ const EditUSer = () => {
     }
   }
   // End
-  // Add user api
+  // Update user api
   const updateUser = async(formValues) => {
     setLoader(true);
     try {
@@ -174,6 +180,7 @@ const EditUSer = () => {
                         :
                         ''}
                     </select>
+                    {roleLoader && <span className="spinner-border spinner-border-sm ml-n3"></span>}
                     {errors.roleId && <label className="text-danger mb-0"> {errors.roleId}</label>}
                   </div>              
                 </div>

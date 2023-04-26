@@ -1,22 +1,25 @@
 const CommonMessage = {
-    created_at: 'Created At',
-    action: 'Action',
-    edit: 'Edit',
-    delete: 'Delete',
-    submit: 'Submit',
-    update: 'Update',
+    add: 'Add',
     name:'Name',
     role: 'Role',
-    add_a_new_role: 'Add a new role',
+    edit: 'Edit',
+    action: 'Action',
+    delete: 'Delete',
+    submit: 'Submit',
+    cancel:'Cancel',
+    update: 'Update',
+    danger: 'danger',
+    success: 'success',
     edit_role: 'Edit role',
     enter_name: 'Enter name',
-    add: 'Add',
-    cancel:'Cancel',
+    created_at: 'Created At',
     select_role: 'Select role',
+    no_data_found: "No data found",
     name_required: 'Name is required',
+    add_a_new_role: 'Add a new role',
     delete_role_message: 'Are you sure you want to delete this role?',
-    success: 'success',
-    danger: 'danger'
-
+    name_more_than_characters: "Name must be more than 3 characters",
+    users: "Users",
+    properties: "Properties"
 }
 export default CommonMessage;

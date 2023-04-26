@@ -1,25 +1,30 @@
-import { Link, useNavigate } from "react-router-dom";
+
+import MessageContext from "../../components/message/context/MessageContext";
 import PageHeading from "../../components/pageheading/PageHeading";
 import CommonMessage from "../../helper/message/CommonMessage";
-import UserMessage from '../../helper/message/UserMessage';
 import { useContext, useEffect, useState } from "react";
-import MessageContext from "../../components/message/context/MessageContext";
-import api from "../../api/Api";
+import { Link, useNavigate } from "react-router-dom";
 import { userValidaions } from "./Validation";
+import UserMessage from './UserMessage';
+import api from "../../api/Api";
 const CreateUser = () => {
+  // base url
   const path = '/users';
-  const rolePath = '/roles'
-  const navigate = useNavigate();
-  // Common Message
-  const {enter_name, submit, cancel, name, role, select_role, success, danger} = CommonMessage;
+  const rolePath = '/roles';
   // End
-  // User Message
+    
+  const navigate = useNavigate();//redired url
+  const {showMessage} = useContext(MessageContext);//Show message
+
+
+  //  Message
+  const {enter_name, submit, cancel, name, role, select_role, success, danger} = CommonMessage;
   const {add_a_user, enter_email, enter_mobile, email, mobile, password, enter_password} = UserMessage;
   // End
 
-  const {showMessage} = useContext(MessageContext);//Show message
-  const [loader, setLoader] = useState(false);//Loader
-  const [roles, setRoles] = useState([]); //roles
+ 
+  const [roleLoader, setRoleLoader] = useState(false);//role loader
+  const [roles, setRoles] = useState([]); //Roles
   // Get role
   useEffect(()=>{
     getRoles();
@@ -27,16 +32,16 @@ const CreateUser = () => {
   // End
   // Get role Api
   const getRoles = async() =>{
-    // setLoader(true);
+    setRoleLoader(true);
     try {
       const res = await api.get(rolePath)
       const resData = res.data;
       if(resData.status === true){
-        // setLoader(false);
+        setRoleLoader(false);
         setRoles(resData.roles)
       }
     } catch (error) {
-      // setLoader(false)
+      setRoleLoader(false)
       const message = error.response.data.message;
         showMessage({
             message: message,
@@ -55,6 +60,7 @@ const CreateUser = () => {
   }
   const [formValues, setFormValues] = useState(intialValues);
   const [errors, setErrors] = useState({});//Error
+  const [loader, setLoader] = useState(false);// loader
   // End
   // Input change
   const handleChange = (e) =>{
@@ -112,51 +118,52 @@ const CreateUser = () => {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="card-body">
-              <div className="row">
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{name}<span className="text-danger">*</span></label>
-                    <input type="text" className="form-control form-control-user" name='name' value={formValues.name} placeholder={enter_name} onChange={handleChange}/>
-                    {errors.name && <label className="text-danger mb-0"> {errors.name}</label>}
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{email}<span className="text-danger">*</span></label>
-                    <input type="email" className="form-control form-control-user"  placeholder={enter_email} name='email' onChange={handleChange} value={formValues.email}/>
-                    {errors.email && <label className="text-danger mb-0"> {errors.email}</label>}
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{mobile}<span className="text-danger">*</span></label>
-                    <input type="number" className="form-control form-control-user"  placeholder={enter_mobile} name='mobile' onChange={handleChange} value={formValues.mobile}/>
-                    {errors.mobile && <label className="text-danger mb-0"> {errors.mobile}</label>}
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-2">
-                    <label>{password}<span className="text-danger">*</span></label>
-                    <input type="password" className="form-control form-control-user" placeholder={enter_password} name='password' onChange={handleChange} value={formValues.password} autoComplete="password"/>
-                    {errors.password && <label className="text-danger mb-0"> {errors.password}</label>}
-                  </div>              
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <div className="form-group mb-0">
-                    <label>{role}<span className="text-danger">*</span></label>
-                    <select className="form-control" name="roleId" onChange={handleChange}>
-                      <option>{select_role}</option>
-                      {roles && roles.length>0 ?
-                       roles.map((role)=>(
-                        <option value={role._id} key={role._id}>{role ? role.name:''}</option>
-                       ))
-                        :
-                        ''}
-                    </select>
-                    {errors.roleId && <label className="text-danger mb-0"> {errors.roleId}</label>}
-                  </div>              
-                </div>
+            <div className="row">
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{name}<span className="text-danger">*</span></label>
+                  <input type="text" className="form-control form-control-user" name='name' value={formValues.name} placeholder={enter_name} onChange={handleChange}/>
+                  {errors.name && <label className="text-danger mb-0"> {errors.name}</label>}
+                </div>              
               </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{email}<span className="text-danger">*</span></label>
+                  <input type="email" className="form-control form-control-user"  placeholder={enter_email} name='email' onChange={handleChange} value={formValues.email}/>
+                  {errors.email && <label className="text-danger mb-0"> {errors.email}</label>}
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{mobile}<span className="text-danger">*</span></label>
+                  <input type="number" className="form-control form-control-user"  placeholder={enter_mobile} name='mobile' onChange={handleChange} value={formValues.mobile}/>
+                  {errors.mobile && <label className="text-danger mb-0"> {errors.mobile}</label>}
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-2">
+                  <label>{password}<span className="text-danger">*</span></label>
+                  <input type="password" className="form-control form-control-user" placeholder={enter_password} name='password' onChange={handleChange} value={formValues.password} autoComplete="password"/>
+                  {errors.password && <label className="text-danger mb-0"> {errors.password}</label>}
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-0">
+                  <label>{role}<span className="text-danger">*</span></label>
+                  <select className="form-control" name="roleId" onChange={handleChange}>
+                    <option>{select_role}</option>
+                    {roles && roles.length>0 ?
+                    roles.map((role)=>(
+                      <option value={role._id} key={role._id}>{role ? role.name:''}</option>
+                    ))
+                      :
+                      ''}
+                  </select>
+                  {roleLoader && <span className="spinner-border spinner-border-sm ml-n3"></span>}
+                  {errors.roleId && <label className="text-danger mb-0"> {errors.roleId}</label>}
+                </div>              
+              </div>
+            </div>
           </div>
           <div className="card-footer">
             <Link to='/users' className="btn btn-outline-primary mr-2">{cancel}</Link>

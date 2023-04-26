@@ -10,14 +10,15 @@ import api from '../../api/Api';
 
 const Role = () => {
   const path = '/roles';//url
-  const {name, created_at, action, role, add, delete_role_message, success, danger} = CommonMessage;
+  const {name, created_at, action, role, add, delete_role_message, success, danger} = CommonMessage;// Message
   const {showMessage} = useContext(MessageContext);  //show message
   const [loader, setLoader]= useState(false)// lodader
-  const [roles, setRoles] = useState([])
+  const [roles, setRoles] = useState([]);//Role
+  // Get roles
   useEffect(()=>{
     getRole();
   },[])
-   // Get Role
+   // Get Role api
    const getRole = async() =>{
     setLoader(true);
     try {
@@ -37,7 +38,6 @@ const Role = () => {
     }
   }
   // End
-
 
   // Delete role
   // Dialog box
@@ -111,8 +111,8 @@ const Role = () => {
                       </tr>
                   </thead>
                   <tbody>
-                  
-                    {roles.length>0 ? 
+                    {
+                    roles.length>0 ? 
                       roles.map((role)=>(
                         <tr key={role._id}>      
                           <td>{role.name ? role.name:''}</td>
@@ -131,7 +131,7 @@ const Role = () => {
                         No data found
                       </td>
                     </tr>
-                        }
+                  }
                   </tbody>
               </table>
               {dialog.isLoading && <Confirmation onDialog={areUSureDelete} message={dialog.message} deleteLoader={deleteLoader}/>}

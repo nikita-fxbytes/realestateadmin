@@ -3,11 +3,11 @@ import { Link, NavLink } from "react-router-dom"
 const Sidebar = () => {
   return (
     <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-        <NavLink className="sidebar-brand d-flex align-items-center justify-content-center" to="index.html">
+        <NavLink className="sidebar-brand d-flex align-items-center justify-content-center" to="dashboard">
             <div className="sidebar-brand-icon rotate-n-15">
                 <i className="fas fa-laugh-wink"></i>
             </div>
-            <div className="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+            <div className="sidebar-brand-text mx-3">Property</div>
         </NavLink>
         <hr className="sidebar-divider my-0"/>
         <li className="nav-item">

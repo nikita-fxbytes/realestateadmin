@@ -1,43 +1,10 @@
 import { Link } from "react-router-dom"
 import PageHeading from "../../components/pageheading/PageHeading"
-import { useContext, useEffect, useState } from "react"
-import MessageContext from "../../components/message/context/MessageContext";
-import api from '../../api/Api';
 import CommonMessage from '../../helper/message/CommonMessage';
+import DashBoardLogic from "./DashBoardLogic";
 const DashBoard = () => {
-    const path = '/counts';//url
-    const {showMessage} = useContext(MessageContext);  //show message
-    const {danger, users, properties} = CommonMessage
-    // DashBoard Count
-    const intialCount = {
-        propertiesCount: 0,
-        usersCount: 0
-    }
-    const [allCounts, setAllCount] = useState(intialCount);//Get dashboard count
-    const [loader, setLoader] = useState(false);//Loader
-    useEffect(()=>{
-        getCount();
-    }, [])
-    // Get count
-    const getCount = async() =>{
-        setLoader(true);
-        try {
-          const res = await api.get(path)
-          const resData = res.data;
-          if(resData.status === true){
-            setLoader(false);
-            setAllCount(resData.allCount);
-          }
-        } catch (error) {
-          setLoader(false)
-          const message = error.response.data.message;
-            showMessage({
-                message: message,
-                type: danger
-            });
-        }
-    }
-
+    const { users, properties} = CommonMessage; //Message
+    const {allCounts, loader} = DashBoardLogic();
     // End
   return (
     <div>

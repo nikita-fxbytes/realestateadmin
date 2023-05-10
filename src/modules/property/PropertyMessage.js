@@ -11,6 +11,7 @@ const PropertyMessage = {
     edit_property: 'Edit Property',
     enter_location:'Enter location',
     enter_bedrooms: "Enter bedrooms",
+    propertyRealtor: "property Realtor",
     price_required: "Price is required",
     property_realtor: "Property Realtor",
     enter_bathrooms: "Enter bathrooms",

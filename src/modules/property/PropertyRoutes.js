@@ -1,16 +1,20 @@
-import { Routes, Route } from "react-router-dom";
-import PropertyCreate from "./PropertyCreate";
-import PropertyEdit from "./PropertyEdit";
-import Property from "./Property";
-import PropertyDetails from "./PropertyDetails";
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import withAuth from '../../helper/middleware/withAuth ';
+const AuthProperty = lazy(() => import('./propertylist/PropertyList').then(module => ({ default: withAuth(module.default) })));
+const AuthPropertyCreate = lazy(() => import('./propertycreate/PropertyCreate').then(module => ({ default: withAuth(module.default) })));
+const AuthPropertyEdit = lazy(() => import('./propertyedit/PropertyEdit').then(module => ({ default: withAuth(module.default) })));
+const AuthPropertyDetails = lazy(() => import('./propertydetails/PropertyDetails').then(module => ({ default: withAuth(module.default) })));
+
 const PropertyRoutes = () => {
   return (
     <Routes>
-        <Route path="/" element={<Property/>}></Route>
-        <Route path="/create" element={<PropertyCreate/>}></Route>
-        <Route path="/edit/:id" element={<PropertyEdit/>}></Route>
-        <Route path="/details/:id" element={<PropertyDetails/>}></Route>
+      <Route path="/" element={<Suspense fallback={<div>Loading...</div>}><AuthProperty/></Suspense>} />
+      <Route path="/create" element={<Suspense fallback={<div>Loading...</div>}><AuthPropertyCreate/></Suspense>} />
+      <Route path="/edit/:id" element={<Suspense fallback={<div>Loading...</div>}><AuthPropertyEdit/></Suspense>} />
+      <Route path="/details/:id" element={<Suspense fallback={<div>Loading...</div>}><AuthPropertyDetails/></Suspense>} />
     </Routes>
   )
 }
+
 export default PropertyRoutes;

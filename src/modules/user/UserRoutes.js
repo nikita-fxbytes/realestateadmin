@@ -1,13 +1,15 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from "react-router-dom";
-import CreateUser from "./CreateUser";
-import EditUSer from "./EditUSer";
-import Users from "./Users";
+import withAuth from '../../helper/middleware/withAuth ';
+const AuthUser = lazy(() => import('./userlist/UsersList').then(module => ({ default: withAuth(module.default) })));
+const AuthUserCreate = lazy(() => import('./createuser/CreateUser').then(module => ({ default: withAuth(module.default) })));
+const AuthUserEdit = lazy(() => import('./edituSer/EditUSer').then(module => ({ default: withAuth(module.default) })));
 const UserRoutes = () => {
   return (
     <Routes>
-        <Route path="/" element={<Users/>}></Route>
-        <Route path="/create" element={<CreateUser/>}></Route>
-        <Route path="/edit/:id" element={<EditUSer/>}></Route>
+      <Route path="/" element={<Suspense fallback={<div>Loading...</div>}><AuthUser/></Suspense>} />
+      <Route path="/create" element={<Suspense fallback={<div>Loading...</div>}><AuthUserCreate/></Suspense>} />
+      <Route path="/edit/:id" element={<Suspense fallback={<div>Loading...</div>}><AuthUserEdit/></Suspense>} />
     </Routes>
   )
 }

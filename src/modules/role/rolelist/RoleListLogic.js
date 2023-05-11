@@ -32,6 +32,7 @@ const RoleLogic = () => {
     getRole()
 };
   // End
+  
   // Get roles
   useEffect(()=>{
     getRole();

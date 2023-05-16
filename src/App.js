@@ -1,5 +1,5 @@
 import { lazy, Suspense, useContext, useEffect } from 'react'
-import { BrowserRouter as Router,  Routes,  Route } from "react-router-dom";
+import { BrowserRouter as Router,  Routes,  Route, Navigate } from "react-router-dom";
 import PropertyRoutes from './modules/property/PropertyRoutes';
 import RoleRoutes from './modules/role/RoleRoutes';
 import Sidebar from './components/layouts/Sidebar';
@@ -9,7 +9,7 @@ import UserRoutes from "./modules/user/UserRoutes";
 import Login from './pages/auth/login/Login';
 import MessageState from "./components/message/context/MessageState";
 import Message from "./components/message/Message";
-import withAuth from './helper/middleware/withAuth ';
+import withAuth from './helper/middleware/withAuth';
 import {getUserToken} from './helper/CommonFunction'
 import AuthContext from './helper/auth/AuthContext';
 const AuthDashBoard = lazy(() => import('./pages/dashboard/DashBoard').then(module => ({ default: withAuth(module.default) })));
@@ -42,7 +42,18 @@ function App() {
               <div className="container-fluid">
                 <Message/>
                 <Routes>
-                  <Route path="/" element={<Login/>}></Route>
+                <Route
+                    path="/"
+                    element={
+                      isLoggedIn ? (
+                        <Navigate to="/dashboard" />
+                      ) : (
+                        <Suspense fallback={<div>Loading...</div>}>
+                          <Login />
+                        </Suspense>
+                      )
+                    }
+                  />
                   <Route path="dashboard" element={<Suspense fallback={<div>Loading...</div>}><AuthDashBoard/></Suspense>} />
                   <Route path="/properties/*" element={<PropertyRoutes/>} />
                   <Route path="/roles/*" element={<RoleRoutes/>} />

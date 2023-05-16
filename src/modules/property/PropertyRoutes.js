@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import withAuth from '../../helper/middleware/withAuth ';
+import withAuth from '../../helper/middleware/withAuth';
 const AuthProperty = lazy(() => import('./propertylist/PropertyList').then(module => ({ default: withAuth(module.default) })));
 const AuthPropertyCreate = lazy(() => import('./propertycreate/PropertyCreate').then(module => ({ default: withAuth(module.default) })));
 const AuthPropertyEdit = lazy(() => import('./propertyedit/PropertyEdit').then(module => ({ default: withAuth(module.default) })));

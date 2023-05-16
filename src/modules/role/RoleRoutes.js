@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import withAuth from '../../helper/middleware/withAuth ';
+import withAuth from '../../helper/middleware/withAuth';
 const AuthRole = lazy(() => import('./rolelist/RoleList').then(module => ({ default: withAuth(module.default) })));
 const AuthRoleCreate = lazy(() => import('./rolecreate/RoleCreate').then(module => ({ default: withAuth(module.default) })));
 const AuthRoleEdit = lazy(() => import('./roleedit/RoleEdit').then(module => ({ default: withAuth(module.default) })));

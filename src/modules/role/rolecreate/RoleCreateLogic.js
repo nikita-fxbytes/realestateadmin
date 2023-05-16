@@ -46,7 +46,7 @@ const RoleCreateLogic = () => {
   const addRole = async(formValues) =>{
     setLoader(true);
     try {
-      const res = await api.post(path, formValues)
+      const res = await api.post(`${path}/create`, formValues)
       const resData = res.data;
       if(resData.status === true){
         setLoader(false)

@@ -1,38 +1,60 @@
 import MessageContext from '../../../components/message/context/MessageContext';
-import { useContext, useEffect, useRef, useState } from 'react';
+import Pagination from '../../../components/pagination/Pagination';
 import CommonMessage from '../../../helper/message/CommonMessage';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { LIMIT, ORDERBY } from '../../../helper/Constent';
 import api from '../../../api/Api';
-
 const RoleLogic = () => {
   const path = '/roles';//url
   const { delete_role_message, success, danger} = CommonMessage;// Message
   const {showMessage} = useContext(MessageContext);  //show message
-  const [loader, setLoader]= useState(false)// lodader
+  const [loader, setLoader]= useState(false);// lodader
   const [roles, setRoles] = useState([]);//Role
-  // Search
+
+  // filter
+  const [sortDirection, setSortDirection] = useState(ORDERBY.DESC);
+  const [sortColumn, setSortColumn] = useState(ORDERBY.CREATEDAT);
   const [searchTerm, setSearchTerm] = useState('');
+  const [totalPages, setTotalPages] = useState(LIMIT.ITEMZERO);
+  const [perPage, setPerPage] = useState(LIMIT.ITEMTEN);
+  const [page, setPage] = useState(LIMIT.ITEMONE);
+  // Search
   const seach = (value)=>{
     setSearchTerm(value)
     getRole()
-  }
+  };
   // End
   // Sorting
-  const [sortDirection, setSortDirection] = useState('desc');
-  const [sortColumn, setSortColumn] = useState('createdAt');
   const handleSort = (column) => {
     if (sortColumn === column) {
         // if the same column is clicked again, toggle sort direction
-        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-        console.log(sortDirection)
+        setSortDirection(sortDirection === ORDERBY.ASC ? ORDERBY.DESC : ORDERBY.ASC);
     } else {
         // if a different column is clicked, set sort column to the new column and sort direction to ascending
         setSortColumn(column);
-        setSortDirection('asc');
+        setSortDirection(ORDERBY.ASC);
     }
     getRole()
-};
+  };
   // End
-  
+  // Pagination
+  const handlePreviousPage = () => {
+    if (page > LIMIT.ITEMONE) {
+      setPage(page - LIMIT.ITEMONE);
+      getRole();
+    }
+  };
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + LIMIT.ITEMONE);
+      getRole();
+    }
+  };
+  const current = (page) =>{
+    setPage(page)
+    getRole();
+  };
+  // End
   // Get roles
   useEffect(()=>{
     getRole();
@@ -44,16 +66,18 @@ const RoleLogic = () => {
       const body = {
         searchTerm: searchTerm,
         sortColumn: sortColumn,
-        sortDirection: sortDirection
+        sortDirection: sortDirection,
+        page: page, // new pagination params
+        perPage: perPage // new pagination params
       };
       const res = await api.post(path, body)
       const resData = res.data;
       if(resData.status === true){
         setLoader(false);
         setRoles(resData.roles)
+        setTotalPages(resData.totalPages)
       }
     } catch (error) {
-      console.log(error)
       setLoader(false)
       const message = error.response.data.message;
         showMessage({
@@ -115,16 +139,23 @@ const RoleLogic = () => {
   }
   // end
   return {
-    areUSureDelete,
+    seach,
+    current,
+    handleSort,
+    Pagination,
     handleDelete,
-    deleteLoader,
+    areUSureDelete,
+    handleNextPage,
+    handlePreviousPage,
+    page,
+    path,
+    roles,
     dialog,
     loader,
-    roles,
-    path,
+    perPage,
     searchTerm,
-    seach,
-    handleSort
+    totalPages,
+    deleteLoader
   }
 }
 export default RoleLogic;

@@ -6,13 +6,13 @@ import Sidebar from './components/layouts/Sidebar';
 import Footer from './components/layouts/Footer';
 import Header from './components/layouts/Header';
 import UserRoutes from "./modules/user/UserRoutes";
-import Login from './pages/auth/login/Login';
 import MessageState from "./components/message/context/MessageState";
 import Message from "./components/message/Message";
 import withAuth from './helper/middleware/withAuth';
 import {getUserToken} from './helper/CommonFunction'
 import AuthContext from './helper/auth/AuthContext';
 const AuthDashBoard = lazy(() => import('./pages/dashboard/DashBoard').then(module => ({ default: withAuth(module.default) })));
+const Login = lazy(() => import('./pages/auth/login/Login'));
 
 function App() {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
@@ -49,7 +49,7 @@ function App() {
                         <Navigate to="/dashboard" />
                       ) : (
                         <Suspense fallback={<div>Loading...</div>}>
-                          <Login />
+                          <Login/>
                         </Suspense>
                       )
                     }

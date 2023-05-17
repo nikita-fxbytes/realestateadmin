@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom"
-
 const Sidebar = () => {
   return (
     <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -16,7 +15,6 @@ const Sidebar = () => {
                 <span>Dashboard</span>
             </NavLink>
         </li>
-
         
          <li className="nav-item">
             <NavLink className="nav-link" to="/properties">
@@ -24,8 +22,6 @@ const Sidebar = () => {
                 <span>Property</span>
             </NavLink>
         </li>
-    
-       
         <li className="nav-item">
             <NavLink className="nav-link" to="users">
                 <i className="fas fa-fw fa-users"></i>

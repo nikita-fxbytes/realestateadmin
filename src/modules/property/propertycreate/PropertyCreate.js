@@ -4,11 +4,11 @@ import PropertyMessage from '../PropertyMessage';
 import PropertyCreateLogic from "./PropertyCreateLogic";
 const PropertyCreate = () => {
  //Messages 
- const {enter_name, submit, cancel, name} = CommonMessage;
+ const {enter_name, submit, cancel, name, status} = CommonMessage;
  const {add_a_new_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor} = PropertyMessage;
 //  End
 // Logic function
- const{userLoader, loader,handleSubmit, handleChange,errors, users, path, formValues} =PropertyCreateLogic()
+ const{userLoader, loader,handleSubmit, handleChange,errors, users, path, formValues, Status} =PropertyCreateLogic()
  // End
   return (
     <>
@@ -58,13 +58,13 @@ const PropertyCreate = () => {
                 </div>              
               </div>
               <div className="col-lg-6 col-md-6">
-                <div className="form-group mb-0">
+                <div className="form-group">
                   <label>{bathrooms}</label>
                   <input type="text" className="form-control form-control-user" name="bathrooms" placeholder={enter_bathrooms} onChange={handleChange} value={formValues.bathrooms}/>
                 </div>              
               </div>
               <div className="col-lg-6 col-md-6">
-                <div className="form-group mb-0">
+                <div className="form-group">
                   <label>{property_realtor}<span className="text-danger">*</span></label>
                   <div className="d-flex align-items-center ">
                     <select className="form-control" name="propertyRealtor" onChange={handleChange}>
@@ -81,6 +81,13 @@ const PropertyCreate = () => {
                   
                   { errors.propertyRealtor && <label className="text-danger mb-0"> {errors.propertyRealtor}</label>}
                 </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                  <div className="form-group mb-0">
+                    <label>{status}<span className="text-danger">*</span></label>
+                    <Status handleChange={handleChange} value={formValues.status}/>
+                    {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
+                  </div>              
               </div>
             </div>
           </div>

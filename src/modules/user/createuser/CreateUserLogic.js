@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userValidaions } from "../Validation";
 import api from "../../../api/Api";
+import { LIMIT, ORDERBY } from "../../../helper/Constent";
+import Status from '../../../components/status/Status'
 const CreateUserLogic = () => {
   // base url
   const path = '/users';
@@ -31,19 +33,38 @@ const CreateUserLogic = () => {
   const getRoles = async() =>{
     setRoleLoader(true);
     try {
-      const res = await api.get(rolePath)
+      const body = {
+        searchTerm: "",
+        sortColumn: ORDERBY.CREATEDAT,
+        sortDirection: ORDERBY.DESC,
+        page: "", // new pagination params
+        perPage: "", // new pagination params,
+        onlyActive: LIMIT.ITEMONE,
+        status: ""
+      };
+      const res = await api.post(rolePath, body)
       const resData = res.data;
       if(resData.status === true){
-        setRoleLoader(false);
         setRoles(resData.roles)
+      }else if(resData.status === false){
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }else{
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
       }
     } catch (error) {
-      setRoleLoader(false)
       const message = error.response.data.message;
         showMessage({
             message: message,
             type: danger
         });
+    }finally{
+      setRoleLoader(false);
     }
   }
   // End
@@ -53,7 +74,8 @@ const CreateUserLogic = () => {
     email: '',
     mobile: '',
     password: '',
-    roleId: ''
+    roleId: '',
+    status: LIMIT.ITEMONE
   }
   const [formValues, setFormValues] = useState(intialValues);
   const [errors, setErrors] = useState({});//Error
@@ -79,8 +101,8 @@ const CreateUserLogic = () => {
     const errors = userValidaions(formValues);
     setErrors(errors);
     if(Object.keys(errors).length ===0){
-      const {name, email, mobile, password, roleId } = formValues;
-      const user = {name, email, mobile, password, roleId}
+      const {name, email, mobile, password, roleId, status } = formValues;
+      const user = {name, email, mobile, password, roleId, status}
       addUser(user);
     }
   }
@@ -89,17 +111,25 @@ const CreateUserLogic = () => {
   const addUser = async(formValues) => {
     setLoader(true);
     try {
-      const res = await api.post(path, formValues)
+      const res = await api.post(`${path}/create`, formValues)
       const resData = res.data;
       if(resData.status === true){
-        setLoader(false);
         showMessage({
           message: resData.message,
           type: success
         });
         navigate(path);
+      }else  if(resData.status === false){
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }else {
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
       }
-      
     } catch (error) {
       setLoader(false);
       const message = error.response.data.message;
@@ -107,6 +137,8 @@ const CreateUserLogic = () => {
         message: message,
         type: danger
       });
+    }finally{
+      setLoader(false);
     }
   }
   // End
@@ -119,7 +151,8 @@ const CreateUserLogic = () => {
     errors,
     handleChange,
     handleSubmit,
-    formValues
+    formValues,
+    Status
   }
 }
 export default CreateUserLogic;

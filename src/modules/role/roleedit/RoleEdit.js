@@ -1,16 +1,13 @@
 import { Link} from "react-router-dom";
-import PageHeading from "../../../components/pageheading/PageHeading";
 import CommonMessage from "../../../helper/message/CommonMessage";
 import RoleEditLogic from "./RoleEditLogic";
 
 const RoleEdit = () => {
-  const {edit_role, enter_name, update, cancel, name} = CommonMessage;//Message
-  const {handleSubmit, handleChange, errors, formValues, loader, path, id} = RoleEditLogic()
+  const {edit_role, enter_name, update, cancel, name, status} = CommonMessage;//Message
+  const { handleSubmit, handleChange, Status,
+          errors, formValues, loader, path} = RoleEditLogic()
   return (
     <>
-      {/* Page heading */}
-      <PageHeading heading={edit_role}/>
-      {/* End */}
       <div className="card shadow mb-4">
         <div className="card-header py-3">
             <h6 className="m-0 font-weight-bold text-primary">{edit_role}</h6>
@@ -24,6 +21,13 @@ const RoleEdit = () => {
                     <label>{name}<span className="text-danger">*</span></label>
                     <input type="text" className="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" name="name" placeholder={enter_name} value={formValues.name} onChange={handleChange}/>
                     {errors.name && <label className="text-danger mb-0"> {errors.name}</label>}
+                  </div>              
+                </div>
+                <div className="col-lg-6 col-md-6">
+                  <div className="form-group mb-0">
+                    <label>{status}<span className="text-danger">*</span></label>
+                    <Status handleChange={handleChange} value={formValues.status}/>
+                    {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
                   </div>              
                 </div>
               </div>

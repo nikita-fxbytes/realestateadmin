@@ -4,6 +4,7 @@ import CommonMessage from '../../../helper/message/CommonMessage';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { LIMIT, ORDERBY } from '../../../helper/Constent';
 import api from '../../../api/Api';
+import Status from '../../../components/status/Status'
 const RoleLogic = () => {
   const path = '/roles';//url
   const { delete_role_message, success, danger} = CommonMessage;// Message
@@ -14,14 +15,20 @@ const RoleLogic = () => {
   // filter
   const [sortDirection, setSortDirection] = useState(ORDERBY.DESC);
   const [sortColumn, setSortColumn] = useState(ORDERBY.CREATEDAT);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [totalPages, setTotalPages] = useState(LIMIT.ITEMZERO);
   const [perPage, setPerPage] = useState(LIMIT.ITEMTEN);
   const [page, setPage] = useState(LIMIT.ITEMONE);
+  const [onlyActive, setOnlyActive] = useState("");
+  const [status, setStatus]= useState("");
   // Search
-  const seach = (value)=>{
-    setSearchTerm(value)
+  const seach = (e)=>{
+    console.log(e.target.value)
+      setSearchTerm(e.target.value)
+    
+   
     getRole()
+    console.log(searchTerm,"searchTerm")
   };
   // End
   // Sorting
@@ -54,11 +61,15 @@ const RoleLogic = () => {
     setPage(page)
     getRole();
   };
+  const statusSearch = (e)=>{
+    setStatus(e.target.value)
+    getRole()
+  }
   // End
   // Get roles
   useEffect(()=>{
     getRole();
-  },[sortColumn, sortDirection])
+  },[sortColumn, sortDirection, status, searchTerm])
    // Get Role api
    const getRole = async() =>{
     setLoader(true);
@@ -68,22 +79,34 @@ const RoleLogic = () => {
         sortColumn: sortColumn,
         sortDirection: sortDirection,
         page: page, // new pagination params
-        perPage: perPage // new pagination params
+        perPage: perPage, // new pagination params,
+        onlyActive: onlyActive,
+        status: status
       };
       const res = await api.post(path, body)
       const resData = res.data;
       if(resData.status === true){
-        setLoader(false);
         setRoles(resData.roles)
         setTotalPages(resData.totalPages)
+      }else if(resData.status === false){
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }else{
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
       }
     } catch (error) {
-      setLoader(false)
       const message = error.response.data.message;
         showMessage({
             message: message,
             type: danger
         });
+    }finally{
+      setLoader(false);
     }
   }
   // End
@@ -139,23 +162,8 @@ const RoleLogic = () => {
   }
   // end
   return {
-    seach,
-    current,
-    handleSort,
-    Pagination,
-    handleDelete,
-    areUSureDelete,
-    handleNextPage,
-    handlePreviousPage,
-    page,
-    path,
-    roles,
-    dialog,
-    loader,
-    perPage,
-    searchTerm,
-    totalPages,
-    deleteLoader
+    seach, current, handleSort, Pagination, handleDelete, areUSureDelete, handleNextPage, handlePreviousPage, statusSearch, Status,
+    page, path, roles, dialog, loader, perPage, searchTerm, totalPages, deleteLoader
   }
 }
 export default RoleLogic;

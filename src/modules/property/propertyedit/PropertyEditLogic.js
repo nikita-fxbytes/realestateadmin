@@ -4,6 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import MessageContext from "../../../components/message/context/MessageContext";
 import { propertiesValidaions } from "../PropertyValidations";
 import api from '../../../api/Api'
+import Status from "../../../components/status/Status";
+import { LIMIT, ORDERBY } from "../../../helper/Constent";
 const PropertyEditLogic = () => {
   // Base path
   const path = '/properties';
@@ -36,19 +38,39 @@ const PropertyEditLogic = () => {
   const getUsers = async() =>{
     setUserLoader(true);
     try {
-      const res = await api.get(`${userPath}?roleName=propertyrealtor`)
+      const body = {
+        searchTerm: '',
+        sortColumn: ORDERBY.CREATEDAT, 
+        sortDirection: ORDERBY.DESC, 
+        page: '',
+        perPage: '',
+        roleName: 'propertyrealtor',
+        onlyActive: LIMIT.ITEMONE,
+        status: ''
+      };
+      const res = await api.post(userPath, body)
       const resData = res.data;
       if(resData.status === true){
-        setUserLoader(false);
         setUsers(resData.users)
+      }else if(resData.status === false){
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }else {
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
       }
     } catch (error) {
-      setUserLoader(false)
       const message = error.response.data.message;
         showMessage({
             message: message,
             type: danger
         });
+    }finally{
+      setUserLoader(false)
     }
   }
   // End
@@ -61,16 +83,26 @@ const PropertyEditLogic = () => {
       const res = await api.get(`${path}/${propertyId}`)
       const resData = res.data;
       if(resData.status === true){
-        setLoader(false);
         setFormValues(resData.property)
+      }else if(resData.status === true){
+        showMessage({
+          message:resData.message,
+          type: danger
+        });
+      }else {
+        showMessage({
+          message:resData.message,
+          type: danger
+        });
       }
     } catch (error) {
-      setLoader(false)
       const message = error.response.data.message;
         showMessage({
             message:message,
             type: danger
         });
+    }finally{
+      setLoader(false);
     }
   }
   // End
@@ -84,7 +116,8 @@ const PropertyEditLogic = () => {
     garage: '',
     bedrooms: '',
     bathrooms: '',
-    propertyRealtor: ''
+    propertyRealtor: '',
+    status:''
   }
   const [formValues, setFormValues] = useState(intialValues);
   const [errors, setErrors] = useState({});//Error
@@ -114,8 +147,8 @@ const PropertyEditLogic = () => {
     const errors = propertiesValidaions(formValues);
     setErrors(errors);
     if(Object.keys(errors).length ===0){
-      const {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor } = formValues;
-      const properties = {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor}
+      const {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status } = formValues;
+      const properties = {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status}
       updateProperty(properties);
     }
   }
@@ -127,21 +160,31 @@ const PropertyEditLogic = () => {
       const res = await api.put(`${path}/${id}`, formValues)
       const resData = res.data;
       if(resData.status === true){
-        setLoader(false);
         showMessage({
           message: resData.message,
           type: success
         });
         navigate(path);
+      }else if(resData.status === false){
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }else {
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
       }
       
     } catch (error) {
-      setLoader(false);
       const message = error.response.data.message;
       showMessage({
         message: message,
         type: danger
       });
+    }finally{
+      setLoader(false);
     }
   }
   // End
@@ -153,7 +196,8 @@ const PropertyEditLogic = () => {
     handleChange,
     handleUpdate,
     formValues,
-    path
+    path,
+    Status
   }
 }
 

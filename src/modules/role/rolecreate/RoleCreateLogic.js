@@ -4,18 +4,19 @@ import { useContext, useState } from "react";
 import MessageContext from '../../../components/message/context/MessageContext'
 import api from '../../../api/Api';
 import { roleValidation } from "../RoleValidation";
+import Status from '../../../components/status/Status'
+import { LIMIT } from "../../../helper/Constent";
 const RoleCreateLogic = () => {
   const path = '/roles';
   const navigate = useNavigate();  //redirect another page
   const {success, danger} = CommonMessage;
-
   const {showMessage} = useContext(MessageContext);  //show message
-
   const [loader, setLoader]= useState(false)// lodader
 
   // Form value
   const intialValues = {
-    name: ''
+    name: '',
+    status: LIMIT.ITEMONE
   }
   const [formValues, setFormValue] = useState(intialValues);
   // End
@@ -36,8 +37,8 @@ const RoleCreateLogic = () => {
     const errors = roleValidation(formValues)
     setErrors(errors);
     if (Object.keys(errors).length === 0) {
-      const {name} = formValues;
-      const role = { name };
+      const {name, status} = formValues;
+      const role = { name, status };
       addRole(role);
     }
   }
@@ -49,29 +50,43 @@ const RoleCreateLogic = () => {
       const res = await api.post(`${path}/create`, formValues)
       const resData = res.data;
       if(resData.status === true){
-        setLoader(false)
+       
         showMessage({
             message:resData.message,
             type: success
           });
           navigate(path);
+      }else if(resData.status === false){
+        showMessage({
+          message:resData.message,
+          type: danger
+        });
+      }else{
+        showMessage({
+          message:resData.message,
+          type: danger
+        }); 
       }
     } catch (error) {
-      setLoader(false)
       const message = error.response.data.message;
         showMessage({
             message:message,
             type: danger
         });
+    }finally{
+      setLoader(false);
     }
   }
   // End
   return {
-    path,
     handleSubmit,
     handleChange,
+    Status,
     errors,
-    loader
+    loader,
+    path,
+    formValues
+    
   }
 }
 

@@ -7,15 +7,10 @@ import Spinner from '../../../components/spinner/Spinner';
 import { dateFormate } from '../../../helper/CommonFunction';
 const PropertyList = () => {
   const {
-    loader,
-    allProperties,
-    handleDelete,
-    deleteLoader,
-    areUSureDelete,
-    path,
-    dialog
+    loader, allProperties, handleDelete, deleteLoader,  areUSureDelete, path, dialog,
+    seach, current, handleSort, Pagination,handleNextPage, handlePreviousPage, statusSearch, Status,page,perPage, searchTerm, totalPages
   } = PropertyLogic();
-  const {name, created_at, action, add, no_data_found, properties} = CommonMessage;
+  const {name, created_at, action, add, no_data_found, properties, search, status} = CommonMessage;
   const {price, propertyRealtor} = PropertyMessage;
   return (
     <>
@@ -27,15 +22,41 @@ const PropertyList = () => {
           </div>
       </div>
       <div className="card-body">
+      <div className='row justify-content-end mb-3'>
+            <div className='col-lg-4 col-md-2 col-12'>
+              <div className='d-flex'>
+                <Status handleChange={statusSearch} value=''/>
+                <input type="text" placeholder={search} className='form-control ml-2' value={searchTerm} onChange={seach}/>
+              </div>
+              
+            </div>
+          </div>
         <div className="table-responsive">
+          
           {loader && <Spinner/>}
           <table className="table table-bordered" id="dataTable" width="100%" cellpacing="0">
             <thead>
                 <tr>
-                    <th>{name}</th>
-                    <th>{price}</th>
-                    <th>{propertyRealtor}</th>
-                    <th className='text-center'>{created_at}</th>
+                    <th onClick={() => handleSort('name')} className='pe-auto'>
+                      {name} 
+                     <i  className="fa fa-sort ml-1"></i>
+                    </th>
+                    <th onClick={() => handleSort('price')} className='pe-auto'>
+                      {price} 
+                     <i  className="fa fa-sort ml-1"></i>
+                    </th>
+                    <th onClick={() => handleSort('propertyRealtor')} className='pe-auto'>
+                      {propertyRealtor} 
+                     <i  className="fa fa-sort ml-1"></i>
+                    </th>
+                    <th className='text-center pe-auto' onClick={() => handleSort('status')}>
+                    {status} 
+                     <i  className="fa fa-sort ml-1"></i>
+                    </th>
+                    <th className='text-center pe-auto' onClick={() => handleSort('createdAt')}>
+                      {created_at} 
+                      <i  className="fa fa-sort ml-1"></i>
+                    </th>
                     <th className='text-center'>{action}</th>
                 </tr>
             </thead>
@@ -53,6 +74,7 @@ const PropertyList = () => {
                       </p>}
                     {property.propertyRealtor && <span><i>({ property.propertyRealtor.mobile  ? property.propertyRealtor.mobile:''})</i></span>}
                     </td>
+                    <td className={property.status== 1 ? 'text-success text-center':'text-center text-danger'}>{property.statusText ??''}</td>
                     <td className='text-center'>{dateFormate(property.createdAt)}</td>
                     <td className='text-center'>
                     <Link to={`${path}/details/${property._id}`} className='text-primary mr-2'><i className='fa fa-eye'></i></Link>
@@ -72,6 +94,7 @@ const PropertyList = () => {
               }
             </tbody>
           </table>
+          {allProperties.length>0 && <Pagination currentPage={page} totalPages={totalPages}  perPage={perPage} handlePreviousPage={handlePreviousPage} handleNextPage={handleNextPage} current={current}/>}
           {dialog.isLoading && <Confirmation onDialog={areUSureDelete} message={dialog.message} deleteLoader={deleteLoader}/>}
         </div>
       </div>

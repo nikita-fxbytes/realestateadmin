@@ -12,7 +12,7 @@ const CommonMessage = {
     success: 'success',
     edit_role: 'Edit role',
     enter_name: 'Enter name',
-    created_at: 'Created At',
+    created_at: 'Created at',
     select_role: 'Select role',
     no_data_found: "No data found",
     name_required: 'Name is required',
@@ -20,6 +20,10 @@ const CommonMessage = {
     delete_role_message: 'Are you sure you want to delete this role?',
     name_more_than_characters: "Name must be more than 3 characters",
     users: "Users",
-    properties: "Properties"
+    properties: "Properties",
+    select_status:"Select status",
+    search: "Search",
+    status: "Status",
+    status_required: "Status is required"
 }
 export default CommonMessage;

@@ -6,26 +6,11 @@ import Spinner from '../../../components/spinner/Spinner';
 import { Link } from 'react-router-dom';
 import RoleLogic from './RoleListLogic';
 const RoleList = () => {
-  const {name, created_at, action, role, add} = CommonMessage;// Message
+  const {name, created_at, action, role, add, search, status, no_data_found} = CommonMessage;// Message
   //Logic function
   const { 
-    seach,
-    current,
-    handleSort,
-    Pagination,
-    handleDelete,
-    areUSureDelete,
-    handleNextPage,
-    handlePreviousPage,
-    page,
-    path,
-    roles,
-    dialog,
-    loader,
-    perPage,
-    searchTerm,
-    totalPages,
-    deleteLoader }= RoleLogic();   // End   
+    seach, current, handleSort, Pagination, handleDelete, areUSureDelete, handleNextPage, handlePreviousPage, statusSearch, Status,
+    page, path, roles, dialog, loader, perPage, searchTerm, totalPages, deleteLoader }= RoleLogic();   // End   
   return (
     <>
       <div className="card shadow mb-4">
@@ -37,8 +22,12 @@ const RoleList = () => {
         </div>
         <div className="card-body">
           <div className='row justify-content-end mb-3'>
-            <div className='col-lg-2 col-md-2 col-12'>
-              <input type="text" placeholder="Search" className='form-control' value={searchTerm} onChange={(e) => seach(e.target.value)}/>
+            <div className='col-lg-4 col-md-2 col-12'>
+              <div className='d-flex'>
+                <Status handleChange={statusSearch} value=''/>
+                <input type="text" placeholder={search} className='form-control ml-2' value={searchTerm} onChange={seach}/>
+              </div>
+              
             </div>
           </div>
           <div className="table-responsive">
@@ -48,11 +37,15 @@ const RoleList = () => {
                 <tr>
                   <th onClick={() => handleSort('name')} className='pe-auto'>
                     {name} 
-                    <i  className="fa fa-sort"></i>
+                     <i  className="fa fa-sort ml-1"></i>
                   </th>
-                  <th className='text-center' onClick={() => handleSort('createdAt')}>
+                  <th className='text-center pe-auto' onClick={() => handleSort('status')}>
+                    {status} 
+                     <i  className="fa fa-sort ml-1"></i>
+                  </th>
+                  <th className='text-center pe-auto' onClick={() => handleSort('createdAt')}>
                     {created_at} 
-                    <i  className="fa fa-sort"></i>
+                     <i  className="fa fa-sort ml-1"></i>
                   </th>
                   <th className='text-center'>
                     {action}
@@ -64,6 +57,7 @@ const RoleList = () => {
                   roles.map((role)=>(
                     <tr key={role._id}>      
                       <td>{role.name ? role.name:''}</td>
+                      <td className={role.status== 1 ? 'text-success text-center':'text-center text-danger'}>{role.statusText ??''}</td>
                       <td className='text-center'>{dateFormate(role.createdAt)}</td>
                       <td className='text-center'>
                         <Link to={`${path}/edit/${role._id}`} className='text-success mr-2'><i className='fa fa-edit'></i></Link>
@@ -75,14 +69,14 @@ const RoleList = () => {
                   )) 
                   :
                   <tr>
-                    <td className='text-center' colSpan={3}>
-                      No data found
+                    <td className='text-center' colSpan={4}>
+                      {no_data_found}
                     </td>
                   </tr>
                 }
               </tbody>
             </table>
-            <Pagination currentPage={page} totalPages={totalPages}  perPage={perPage} handlePreviousPage={handlePreviousPage} handleNextPage={handleNextPage} current={current}/>
+            {roles.length>0 && <Pagination currentPage={page} totalPages={totalPages}  perPage={perPage} handlePreviousPage={handlePreviousPage} handleNextPage={handleNextPage} current={current}/>}
             {dialog.isLoading && <Confirmation onDialog={areUSureDelete} message={dialog.message} deleteLoader={deleteLoader}/>}
           </div>
         </div>

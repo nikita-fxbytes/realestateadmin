@@ -3,6 +3,9 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import CommonMessage from '../../../helper/message/CommonMessage';
 import UserMessage from '../UserMessage';
 import api from '../../../api/Api';
+import { LIMIT, ORDERBY } from '../../../helper/Constent';
+import Pagination from '../../../components/pagination/Pagination';
+import Status from '../../../components/status/Status';
 const UsersListLogic = () => {
   const path = '/users';//Base url
   // Message 
@@ -13,28 +16,99 @@ const UsersListLogic = () => {
 
   const [loader, setLoader]= useState(false)// lodader
   const [allUsers, setAllUsers] = useState([]);//Get user
+   // filter
+   const [sortDirection, setSortDirection] = useState(ORDERBY.DESC);
+   const [sortColumn, setSortColumn] = useState(ORDERBY.CREATEDAT);
+   const [searchTerm, setSearchTerm] = useState("");
+   const [totalPages, setTotalPages] = useState(LIMIT.ITEMZERO);
+   const [perPage, setPerPage] = useState(LIMIT.ITEMTEN);
+   const [page, setPage] = useState(LIMIT.ITEMONE);
+   const [onlyActive, setOnlyActive] = useState("");
+   const [status, setStatus]= useState("");
+   // Search
+   const seach = (e)=>{
+      setSearchTerm(e.target.value)
+      getUsers()
+    };
+   // End
+   // Sorting
+   const handleSort = (column) => {
+     if (sortColumn === column) {
+         // if the same column is clicked again, toggle sort direction
+         setSortDirection(sortDirection === ORDERBY.ASC ? ORDERBY.DESC : ORDERBY.ASC);
+     } else {
+         // if a different column is clicked, set sort column to the new column and sort direction to ascending
+         setSortColumn(column);
+         setSortDirection(ORDERBY.ASC);
+     }
+     getUsers()
+   };
+   // End
+   // Pagination
+   const handlePreviousPage = () => {
+     if (page > LIMIT.ITEMONE) {
+       setPage(page - LIMIT.ITEMONE);
+       getUsers();
+     }
+   };
+   const handleNextPage = () => {
+     if (page < totalPages) {
+       setPage(page + LIMIT.ITEMONE);
+       getUsers();
+     }
+   };
+   const current = (page) =>{
+     setPage(page)
+     getUsers();
+   };
+   const statusSearch = (e)=>{
+     setStatus(e.target.value)
+     getUsers()
+   }
+   // End
   // Get user
   useEffect(()=>{
     getUsers();
-  },[])
+  },[sortColumn, sortDirection, status, searchTerm])
   // End
    // Get user api
    const getUsers = async() =>{
-    setLoader(true);
     try {
-      const res = await api.get(path)
+      setLoader(true);
+      const body = {
+        searchTerm: searchTerm,
+        sortColumn: sortColumn, 
+        sortDirection: sortDirection, 
+        page: page,
+        perPage: perPage,
+        roleName: "",
+        onlyActive: onlyActive,
+        status: status
+      };
+      const res = await api.post(path, body)
       const resData = res.data;
       if(resData.status === true){
-        setLoader(false);
-        setAllUsers(resData.users)
+        setAllUsers(resData.users);
+        setTotalPages(resData.totalPages)
+      }else if(resData.status === false){
+        showMessage({
+          message:resData.message,
+          type: danger
+        });
+      }else{
+        showMessage({
+          message:resData.message,
+          type: danger
+        });
       }
     } catch (error) {
-      setLoader(false)
       const message = error.response.data.message;
         showMessage({
             message: message,
             type: danger
         });
+    }finally{
+      setLoader(false);
     }
   }
   // End
@@ -90,13 +164,8 @@ const UsersListLogic = () => {
   }
   // end
   return {
-    handleDelete,
-    areUSureDelete,
-    deleteLoader,
-    dialog,
-    loader,
-    allUsers,
-    path
+    handleDelete, areUSureDelete, Pagination, seach, current, handleSort, handleNextPage, handlePreviousPage, statusSearch, Status,
+    deleteLoader, dialog, loader, allUsers, path, page, perPage, searchTerm, totalPages,
   }
 }
 export default UsersListLogic;

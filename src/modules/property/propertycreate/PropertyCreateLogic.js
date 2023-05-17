@@ -4,6 +4,8 @@ import { propertiesValidaions } from "../PropertyValidations";
 import { useContext, useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
 import api from "../../../api/Api";
+import { LIMIT, ORDERBY } from "../../../helper/Constent";
+import Status from "../../../components/status/Status";
 const PropertyCreateLogic = () => {
   // Base path
   const path = '/properties';
@@ -32,19 +34,39 @@ const PropertyCreateLogic = () => {
   const getUsers = async() =>{
     setUserLoader(true);
     try {
-      const res = await api.get(`${userPath}?roleName=propertyrealtor`)
+      const body = {
+        searchTerm: '',
+        sortColumn: ORDERBY.CREATEDAT, 
+        sortDirection: ORDERBY.DESC, 
+        page: '',
+        perPage: '',
+        roleName: 'propertyrealtor',
+        onlyActive: LIMIT.ITEMONE,
+        status: ''
+      };
+      const res = await api.post(userPath, body)
       const resData = res.data;
       if(resData.status === true){
-        setUserLoader(false);
         setUsers(resData.users)
+      }else if(resData.status === false){
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }else {
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
       }
     } catch (error) {
-      setUserLoader(false)
       const message = error.response.data.message;
         showMessage({
             message: message,
             type: danger
         });
+    }finally{
+      setUserLoader(false)
     }
   }
   // End
@@ -59,7 +81,8 @@ const PropertyCreateLogic = () => {
     garage: '',
     bedrooms: '',
     bathrooms: '',
-    propertyRealtor: ''
+    propertyRealtor: '',
+    status: LIMIT.ITEMONE
   }
   const [formValues, setFormValues] = useState(intialValues);
   const [errors, setErrors] = useState({});//Error
@@ -90,8 +113,8 @@ const PropertyCreateLogic = () => {
     const errors = propertiesValidaions(formValues);
     setErrors(errors);
     if(Object.keys(errors).length ===0){
-      const {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor } = formValues;
-      const properties = {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor}
+      const {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status } = formValues;
+      const properties = {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status}
       addProperty(properties);
     }
   }
@@ -100,24 +123,34 @@ const PropertyCreateLogic = () => {
   const addProperty = async(formValues) => {
     setLoader(true);
     try {
-      const res = await api.post(path, formValues)
+      const res = await api.post(`${path}/create`, formValues)
       const resData = res.data;
       if(resData.status === true){
-        setLoader(false);
         showMessage({
           message: resData.message,
           type: success
         });
         navigate(path);
+      }else if(resData.status === false){
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }else{
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
       }
       
     } catch (error) {
-      setLoader(false);
       const message = error.response.data.message;
       showMessage({
         message: message,
         type: danger
       });
+    }finally{
+      setLoader(false);
     }
   }
   // End
@@ -130,7 +163,8 @@ const PropertyCreateLogic = () => {
     handleChange,
     users,
     path,
-    formValues
+    formValues,
+    Status
   }
 }
 

@@ -2,7 +2,7 @@ import CommonMessage from "../../helper/message/CommonMessage";
 import UserMessage from "./UserMessage";
 // User validation
 export const userValidaions =(values)=>{
-  const {name_required, name_more_than_characters} =CommonMessage;
+  const {name_required, name_more_than_characters, status_required} =CommonMessage;
   const { email_required, email_format, mobile_required, mobile_more_than_characters, mobile_cannot_more_than_characters, password_required, password_more_than_characters, password_cannot_more_than_characters, password_formate, role_required } = UserMessage
   const errors = {};
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -41,14 +41,16 @@ export const userValidaions =(values)=>{
   if (!values.roleId){
     errors.roleId = role_required;
   }
+  if (!values.status){
+    errors.status = status_required
+  }
   return errors;
 }
 // End
 // User validation
 export const editUserValidaions =(values)=>{
-    console.log(values,"values")
-    const {name_required} =CommonMessage;
-    const { name_more_than_characters, email_required, email_format, mobile_required, mobile_more_than_characters, mobile_cannot_more_than_characters, password_required, password_more_than_characters, password_cannot_more_than_characters, password_formate, role_required } = UserMessage
+    const {name_required, status_required} =CommonMessage;
+    const { name_more_than_characters, email_required, email_format, mobile_required, mobile_more_than_characters, mobile_cannot_more_than_characters, role_required } = UserMessage
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     // Name
@@ -74,6 +76,9 @@ export const editUserValidaions =(values)=>{
     //Role
     if (!values.roleId){
       errors.roleId = role_required;
+    }
+    if (!values.status){
+      errors.status = status_required;
     }
     return errors;
   }

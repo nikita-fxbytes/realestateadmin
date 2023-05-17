@@ -5,11 +5,11 @@ import PropertyEditLogic from "./PropertyEditLogic";
 const PropertyEdit = () => {
 
   // Message
-  const {enter_name, update, cancel, name,} = CommonMessage;
+  const {enter_name, update, cancel, name, status} = CommonMessage;
   const {edit_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor} = PropertyMessage;
   // End
   const { userLoader,
-    users, loader, errors, handleChange, handleUpdate, formValues, path} = PropertyEditLogic()
+    users, loader, errors, handleChange, handleUpdate, formValues, path, Status} = PropertyEditLogic()
   return (
     <>
       <div className="card shadow mb-4">
@@ -67,7 +67,7 @@ const PropertyEdit = () => {
                 <div className="form-group mb-0">
                   <label>{property_realtor}<span className="text-danger">*</span></label>
                   <div className="d-flex align-items-center ">
-                    <select className="form-control" name="propertyRealtor" onChange={handleChange} value={formValues.propertyRealtor._id}>
+                    <select className="form-control" name="propertyRealtor" onChange={handleChange} value={formValues.propertyRealtor !=undefined && formValues.propertyRealtor !=null ? formValues.propertyRealtor._id:''}>
                       <option>{select_property_realtor}</option>
                       {users && users.length>0 ?
                       users.map((user)=>(
@@ -81,6 +81,13 @@ const PropertyEdit = () => {
                   
                   {errors.propertyRealtor && <label className="text-danger mb-0"> {errors.propertyRealtor}</label>}
                 </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                  <div className="form-group mb-0">
+                    <label>{status}<span className="text-danger">*</span></label>
+                    <Status handleChange={handleChange} value={formValues.status}/>
+                    {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
+                  </div>              
               </div>
             </div>
           </div>

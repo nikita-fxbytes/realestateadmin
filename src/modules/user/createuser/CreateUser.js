@@ -1,20 +1,19 @@
 
-import PageHeading from "../../../components/pageheading/PageHeading";
+
 import CommonMessage from "../../../helper/message/CommonMessage";
 import { Link } from "react-router-dom";
 import UserMessage from '../UserMessage';
 import CreateUserLogic from "./CreateUserLogic";
 const CreateUser = () => {
     //  Message
-    const {enter_name, submit, cancel, name, role, select_role} = CommonMessage;
+    const {enter_name, submit, cancel, name, role, select_role, status} = CommonMessage;
     const {add_a_user, enter_email, enter_mobile, email, mobile, password, enter_password} = UserMessage;
     // End
     //Logical function
-    const {path, roleLoader, roles, loader, errors,handleChange, handleSubmit, formValues} = CreateUserLogic();
+    const {path, roleLoader, roles, loader, errors,handleChange, handleSubmit, Status, formValues} = CreateUserLogic();
     // End 
   return (
     <>
-      <PageHeading heading={add_a_user}/>
       <div className="card shadow mb-4">
         <div className="card-header py-3">
             <h6 className="m-0 font-weight-bold text-primary">{add_a_user}</h6>
@@ -64,6 +63,13 @@ const CreateUser = () => {
                   </select>
                   {roleLoader && <span className="spinner-border spinner-border-sm ml-n3"></span>}
                   {errors.roleId && <label className="text-danger mb-0"> {errors.roleId}</label>}
+                </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                <div className="form-group mb-0">
+                  <label>{status}<span className="text-danger">*</span></label>
+                  <Status handleChange={handleChange} value={formValues.status}/>
+                  {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
                 </div>              
               </div>
             </div>

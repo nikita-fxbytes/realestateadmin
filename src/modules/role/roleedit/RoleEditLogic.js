@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import MessageContext from '../../../components/message/context/MessageContext'
 import api from '../../../api/Api';
 import { roleValidation } from "../RoleValidation";
+import Status from '../../../components/status/Status'
 const RoleEditLogic = () => {
   const path = '/roles';//Base url
   const { id } = useParams();//Get id
@@ -38,7 +39,8 @@ const RoleEditLogic = () => {
   // End
   // Form value
   const intialValues = {
-    name: ''
+    name: '',
+    status:''
   }
   const [formValues, setFormValue] = useState(intialValues)
   // End
@@ -59,8 +61,8 @@ const RoleEditLogic = () => {
     const errors = roleValidation(formValues)
     setErrors(errors);
     if (Object.keys(errors).length === 0) {
-      const {name} = formValues;
-      const role = { name };
+      const {name, status} = formValues;
+      const role = { name, status };
       editRole(role);
     }
   }
@@ -71,28 +73,38 @@ const RoleEditLogic = () => {
     try {
       const res = await api.put(`${path}/${id}`, formValues)
       const resData = res.data;
-      console.log(resData.message)
       if(resData.status === true){
-        setLoader(false)
         showMessage({
             message:resData.message,
             type: success
           });
           navigate(path);
+      }else if (resData.status === false){
+        showMessage({
+          message:resData.message,
+          type: danger
+        });
+      }else{
+        showMessage({
+          message:resData.message,
+          type: danger
+        });
       }
     } catch (error) {
-      setLoader(false)
       const message = error.response.data.message;
         showMessage({
             message:message,
             type: danger
         });
+    }finally{
+      setLoader(false)
     }
   }
   // End
   return {
     handleSubmit,
     handleChange,
+    Status,
     errors,
     formValues,
     loader,

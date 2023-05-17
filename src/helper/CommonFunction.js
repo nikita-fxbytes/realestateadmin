@@ -20,3 +20,14 @@ export const getUserToken = ()=>{
   return localStorage.getItem(TOKEN)
 }
 // End
+// Remove user token
+export const removeUserToken =()=> {
+  localStorage.removeItem(TOKEN);
+}
+// End
+// Logout user
+export const logout = ()=> {
+  removeUserToken();
+  // router.push('/'); // navigate to dalal list
+}
+// End

@@ -12,6 +12,7 @@ import withAuth from './helper/middleware/withAuth';
 import {getUserToken} from './helper/CommonFunction'
 import AuthContext from './helper/auth/AuthContext';
 const AuthDashBoard = lazy(() => import('./pages/dashboard/DashBoard').then(module => ({ default: withAuth(module.default) })));
+const AuthProfile = lazy(() => import('./pages/auth/profile/Profile').then(module => ({ default: withAuth(module.default) })));
 const Login = lazy(() => import('./pages/auth/login/Login'));
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
                   <Route path="/properties/*" element={<PropertyRoutes/>} />
                   <Route path="/roles/*" element={<RoleRoutes/>} />
                   <Route path="/users/*" element={<UserRoutes/>} />
+                  <Route path="profile" element={<Suspense fallback={<div>Loading...</div>}><AuthProfile/></Suspense>} />
                 </Routes>
               </div>
             </div>

@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import withAuth from '../../helper/middleware/withAuth';
 const AuthUser = lazy(() => import('./userlist/UsersList').then(module => ({ default: withAuth(module.default) })));
 const AuthUserCreate = lazy(() => import('./createuser/CreateUser').then(module => ({ default: withAuth(module.default) })));
-const AuthUserEdit = lazy(() => import('./edituSer/EditUSer').then(module => ({ default: withAuth(module.default) })));
+const AuthUserEdit = lazy(() => import('./edituser/EditUser').then(module => ({ default: withAuth(module.default) })));
 const UserRoutes = () => {
   return (
     <Routes>

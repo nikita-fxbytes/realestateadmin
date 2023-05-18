@@ -31,12 +31,8 @@ const PropertyLogic = () => {
  const [status, setStatus]= useState("");
  // Search
  const seach = (e)=>{
-   console.log(e.target.value)
-     setSearchTerm(e.target.value)
-   
-  
-   getProperties()
-   console.log(searchTerm,"searchTerm")
+    setSearchTerm(e.target.value)
+    getProperties()
  };
  // End
  // Sorting

@@ -51,7 +51,6 @@ const Login = () =>{
     try {
       const res = await api.post(`/login`, formValues)
       const resData = res.data;
-      console.log(resData,"resData")
       if(resData.status === true){
         setIsLoggedIn(true);
         setLoader(false)

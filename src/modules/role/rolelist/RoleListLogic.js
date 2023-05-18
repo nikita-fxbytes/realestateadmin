@@ -23,12 +23,8 @@ const RoleLogic = () => {
   const [status, setStatus]= useState("");
   // Search
   const seach = (e)=>{
-    console.log(e.target.value)
       setSearchTerm(e.target.value)
-    
-   
-    getRole()
-    console.log(searchTerm,"searchTerm")
+      getRole()
   };
   // End
   // Sorting

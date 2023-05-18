@@ -15,7 +15,6 @@ const Header = () => {
                 <i className="fa fa-bars"></i>
             </button>
             <ul className="navbar-nav ml-auto">
-               
                 <li className="nav-item dropdown no-arrow">
                     <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

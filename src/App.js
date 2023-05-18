@@ -28,9 +28,7 @@ function App() {
     }else{
       setIsLoggedIn(false);
     }
-    console.log(token,"token")
   }
-  console.log(isLoggedIn)
   return (
   
       <MessageState>

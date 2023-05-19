@@ -1,14 +1,13 @@
-import { Link } from "react-router-dom"
-import PageHeading from "../../components/pageheading/PageHeading"
-import CommonMessage from '../../helper/message/CommonMessage';
+import {Link} from "react-router-dom"
 import DashBoardLogic from "./DashBoardLogic";
+import Spinner from '../../components/spinner/Spinner'
+import CommonMessage from '../../helper/message/CommonMessage';
 const DashBoard = () => {
     const { users, properties} = CommonMessage; //Message
-    const {allCounts, loader} = DashBoardLogic();
-    // End
+    const {allCounts, loader} = DashBoardLogic();//Logic
   return (
     <div>
-        <PageHeading heading='Dashboard'/>
+        {loader && <Spinner/>}
         <div className="row">
             <div className="col-xl-3 col-md-6 mb-4">
                 <Link to={'/users'}>
@@ -26,8 +25,7 @@ const DashBoard = () => {
                             </div>
                         </div>
                     </div>
-                </Link>
-                
+                </Link> 
             </div>
             <div className="col-xl-3 col-md-6 mb-4">
                 <Link to={'/properties'}>
@@ -51,5 +49,4 @@ const DashBoard = () => {
     </div>
   )
 }
-
-export default DashBoard
+export default DashBoard;

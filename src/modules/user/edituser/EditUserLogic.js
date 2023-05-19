@@ -3,11 +3,14 @@ import {useNavigate, useParams } from "react-router-dom";
 import CommonMessage from "../../../helper/message/CommonMessage";
 import { useContext, useEffect, useState } from "react";
 import { editUserValidaions } from "../Validation";
-import api from "../../../api/Api";
-import { LIMIT, ORDERBY } from "../../../helper/Constent";
+import createAPI from "../../../api/Api";
+import { LIMIT, ORDERBY, STATUSCODE } from "../../../helper/Constent";
 import Status from '../../../components/status/Status'
-
+import LogOutLogic from "../../../helper/auth/LogOutLogic";
 const EditUserLogic = () => {
+  const {logOut} = LogOutLogic()
+const apiCreator = createAPI();
+const api = apiCreator(); 
   // Base url
   const path = '/users';
   const rolePath = '/roles';
@@ -56,12 +59,16 @@ const EditUserLogic = () => {
         });
       }
     } catch (error) {
-      const message = error.response.data.message;
-        showMessage({
-            message: message,
-            type: danger
-        });
-    }finally{
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+  }finally{
       setRoleLoader(false);
     }
   }
@@ -87,12 +94,16 @@ const EditUserLogic = () => {
         });
       }
     } catch (error) {
-      const message = error.response.data.message;
-        showMessage({
-            message:message,
-            type: danger
-        });
-    }finally{
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+  }finally{
       setLoader(false)
     }
   }
@@ -158,13 +169,17 @@ const EditUserLogic = () => {
           type: danger
         });
       }
-    } catch (error) {
-      const message = error.response.data.message;
+    }catch (error) {
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
       showMessage({
-        message: message,
-        type: danger
+          message:message,
+          type: danger
       });
-    }finally{
+  }finally{
       setLoader(false);
     }
   }

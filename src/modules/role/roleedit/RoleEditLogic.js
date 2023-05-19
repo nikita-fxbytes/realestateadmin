@@ -2,10 +2,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import CommonMessage from "../../../helper/message/CommonMessage";
 import { useContext, useEffect, useState } from "react";
 import MessageContext from '../../../components/message/context/MessageContext'
-import api from '../../../api/Api';
+import createAPI from '../../../api/Api';
 import { roleValidation } from "../RoleValidation";
 import Status from '../../../components/status/Status'
+import LogOutLogic from "../../../helper/auth/LogOutLogic";
+import { STATUSCODE } from "../../../helper/Constent";
 const RoleEditLogic = () => {
+  const {logOut} = LogOutLogic()
+  const apiCreator = createAPI();
+  const api = apiCreator();
   const path = '/roles';//Base url
   const { id } = useParams();//Get id
   const navigate = useNavigate();  //redirect another page
@@ -24,17 +29,22 @@ const RoleEditLogic = () => {
       const res = await api.get(`${path}/${roleId}`)
       const resData = res.data;
       if(resData.status === true){
-        setLoader(false);
+      
         setFormValue(resData.role)
       }
     } catch (error) {
-      setLoader(false)
-      const message = error.response.data.message;
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
       showMessage({
-        message:message,
-        type: danger
+          message:message,
+          type: danger
       });
-    }
+  }finally{
+    setLoader(false);
+  }
   }
   // End
   // Form value
@@ -91,12 +101,16 @@ const RoleEditLogic = () => {
         });
       }
     } catch (error) {
-      const message = error.response.data.message;
-        showMessage({
-            message:message,
-            type: danger
-        });
-    }finally{
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+  }finally{
       setLoader(false)
     }
   }

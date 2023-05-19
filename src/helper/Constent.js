@@ -13,3 +13,6 @@ export const STATUS = [
     {id: 1, name: 'Active'},
     {id: 0, name: 'Inactive'}
 ];
+export const STATUSCODE={
+    UNAUTHENTICATED:401
+};

@@ -2,11 +2,15 @@ import {useNavigate } from "react-router-dom";
 import CommonMessage from "../../../helper/message/CommonMessage";
 import { useContext, useState } from "react";
 import MessageContext from '../../../components/message/context/MessageContext'
-import api from '../../../api/Api';
+import createAPI from '../../../api/Api';
 import { roleValidation } from "../RoleValidation";
 import Status from '../../../components/status/Status'
-import { LIMIT } from "../../../helper/Constent";
+import { LIMIT, STATUSCODE } from "../../../helper/Constent";
+import LogOutLogic from "../../../helper/auth/LogOutLogic";
 const RoleCreateLogic = () => {
+  const {logOut} = LogOutLogic()
+const apiCreator = createAPI();
+const api = apiCreator(); 
   const path = '/roles';
   const navigate = useNavigate();  //redirect another page
   const {success, danger} = CommonMessage;
@@ -68,12 +72,16 @@ const RoleCreateLogic = () => {
         }); 
       }
     } catch (error) {
-      const message = error.response.data.message;
-        showMessage({
-            message:message,
-            type: danger
-        });
-    }finally{
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+  }finally{
       setLoader(false);
     }
   }

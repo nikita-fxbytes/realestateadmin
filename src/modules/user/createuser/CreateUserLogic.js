@@ -4,10 +4,14 @@ import CommonMessage from "../../../helper/message/CommonMessage";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userValidaions } from "../Validation";
-import api from "../../../api/Api";
-import { LIMIT, ORDERBY } from "../../../helper/Constent";
+import createAPI from "../../../api/Api";
+import { LIMIT, ORDERBY, STATUSCODE } from "../../../helper/Constent";
 import Status from '../../../components/status/Status'
+import LogOutLogic from "../../../helper/auth/LogOutLogic";
 const CreateUserLogic = () => {
+  const {logOut} = LogOutLogic()
+  const apiCreator = createAPI();
+  const api = apiCreator(); 
   // base url
   const path = '/users';
   const rolePath = '/roles';
@@ -57,13 +61,17 @@ const CreateUserLogic = () => {
           type: danger
         });
       }
-    } catch (error) {
-      const message = error.response.data.message;
-        showMessage({
-            message: message,
-            type: danger
-        });
-    }finally{
+    }catch (error) {
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+  }finally{
       setRoleLoader(false);
     }
   }

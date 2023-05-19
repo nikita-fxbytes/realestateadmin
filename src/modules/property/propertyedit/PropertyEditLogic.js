@@ -3,10 +3,14 @@ import CommonMessage from "../../../helper/message/CommonMessage";
 import { useContext, useEffect, useState } from "react";
 import MessageContext from "../../../components/message/context/MessageContext";
 import { propertiesValidaions } from "../PropertyValidations";
-import api from '../../../api/Api'
+import createAPI from '../../../api/Api'
 import Status from "../../../components/status/Status";
-import { LIMIT, ORDERBY } from "../../../helper/Constent";
+import { LIMIT, ORDERBY, STATUSCODE } from "../../../helper/Constent";
+import LogOutLogic from '../../../helper/auth/LogOutLogic'
 const PropertyEditLogic = () => {
+  const {logOut} = LogOutLogic();
+  const apiCreator = createAPI();
+  const api = apiCreator(); 
   // Base path
   const path = '/properties';
   const userPath = '/users';
@@ -64,12 +68,16 @@ const PropertyEditLogic = () => {
         });
       }
     } catch (error) {
-      const message = error.response.data.message;
-        showMessage({
-            message: message,
-            type: danger
-        });
-    }finally{
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+  }finally{
       setUserLoader(false)
     }
   }
@@ -96,12 +104,16 @@ const PropertyEditLogic = () => {
         });
       }
     } catch (error) {
-      const message = error.response.data.message;
-        showMessage({
-            message:message,
-            type: danger
-        });
-    }finally{
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+  }finally{
       setLoader(false);
     }
   }
@@ -177,13 +189,17 @@ const PropertyEditLogic = () => {
         });
       }
       
-    } catch (error) {
-      const message = error.response.data.message;
+    }catch (error) {
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
       showMessage({
-        message: message,
-        type: danger
+          message:message,
+          type: danger
       });
-    }finally{
+  }finally{
       setLoader(false);
     }
   }

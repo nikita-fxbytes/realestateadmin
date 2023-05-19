@@ -5,8 +5,8 @@ import UserMessage from '../UserMessage';
 import EditUserLogic from "./EditUserLogic";
 const EditUSer = () => {
   //Message
-  const {enter_name, update, cancel, name, role, select_role, status} = CommonMessage;
-  const {edit_user, enter_email, enter_mobile, email, mobile, password, enter_password} = UserMessage;
+  const {enter_name, update, cancel, name, role, select_role, status,email, mobile, enter_email, enter_mobile,} = CommonMessage;
+  const {edit_user,   password, enter_password} = UserMessage;
   const {handleSubmit, handleChange, loader, formValues, errors, roleLoader, roles, Status} = EditUserLogic()
   return (
     <>

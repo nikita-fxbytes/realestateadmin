@@ -3,9 +3,12 @@ import Pagination from '../../../components/pagination/Pagination';
 import CommonMessage from '../../../helper/message/CommonMessage';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { LIMIT, ORDERBY } from '../../../helper/Constent';
-import api from '../../../api/Api';
+import createAPI from '../../../api/Api';
 import Status from '../../../components/status/Status'
 const RoleLogic = () => {
+  const apiCreator = createAPI(); // Invoke the `createAPI` function to get the `instanceCreator`
+
+  const api = apiCreator(); // Invoke the `instanceCreator` function to get the Axios instance
   const path = '/roles';//url
   const { delete_role_message, success, danger} = CommonMessage;// Message
   const {showMessage} = useContext(MessageContext);  //show message

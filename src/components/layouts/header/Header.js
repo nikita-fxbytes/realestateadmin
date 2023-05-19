@@ -1,15 +1,8 @@
-import { NavLink } from "react-router-dom"
-import { logout } from "../../helper/CommonFunction"
-import { useContext } from "react";
-import AuthContext from "../../helper/auth/AuthContext";
-
+import HeaderLogic from "./HeaderLogic";
+import { NavLink } from "react-router-dom";
 const Header = () => {
-    const { setIsLoggedIn } = useContext(AuthContext);
-    const logOut = () =>{
-        setIsLoggedIn(false)
-        logout();
-    }
-  return (
+    const {logOut, userName } = HeaderLogic();//Logic 
+    return (
         <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
             <button id="sidebarToggleTop" className="btn btn-link d-md-none rounded-circle mr-3">
                 <i className="fa fa-bars"></i>
@@ -18,9 +11,9 @@ const Header = () => {
                 <li className="nav-item dropdown no-arrow">
                     <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span className="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                        <span className="mr-2 d-none d-lg-inline text-gray-600 small">{userName??''}</span>
                         <img className="img-profile rounded-circle"
-                            src="img/undraw_profile.svg"/>
+                            src={process.env.PUBLIC_URL + '/img/undraw_profile.svg'}/>
                     </a>
                     <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
@@ -41,9 +34,8 @@ const Header = () => {
                     </div>
                 </li>
             </ul>
-        </nav>
-               
-  )
+        </nav>    
+    );
 }
 
-export default Header
+export default Header;

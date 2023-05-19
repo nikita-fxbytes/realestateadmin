@@ -2,11 +2,15 @@ import MessageContext from '../../../components/message/context/MessageContext';
 import { useContext, useEffect, useRef, useState } from 'react';
 import CommonMessage from '../../../helper/message/CommonMessage';
 import UserMessage from '../UserMessage';
-import api from '../../../api/Api';
-import { LIMIT, ORDERBY } from '../../../helper/Constent';
+import createAPI from '../../../api/Api';
+import { LIMIT, ORDERBY, STATUSCODE } from '../../../helper/Constent';
 import Pagination from '../../../components/pagination/Pagination';
 import Status from '../../../components/status/Status';
+import LogOutLogic from '../../../helper/auth/LogOutLogic';
 const UsersListLogic = () => {
+  const {logOut} = LogOutLogic()
+  const apiCreator = createAPI();
+  const api = apiCreator(); 
   const path = '/users';//Base url
   // Message 
   const { danger, success} = CommonMessage;
@@ -102,12 +106,16 @@ const UsersListLogic = () => {
         });
       }
     } catch (error) {
-      const message = error.response.data.message;
-        showMessage({
-            message: message,
-            type: danger
-        });
-    }finally{
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+  }finally{
       setLoader(false);
     }
   }

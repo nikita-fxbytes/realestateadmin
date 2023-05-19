@@ -1,15 +1,15 @@
-import CommonMessage from "../../../helper/message/CommonMessage";
 import { Link } from "react-router-dom";
 import PropertyMessage from '../PropertyMessage';
 import PropertyCreateLogic from "./PropertyCreateLogic";
+import CommonMessage from "../../../helper/message/CommonMessage";
 const PropertyCreate = () => {
- //Messages 
- const {enter_name, submit, cancel, name, status} = CommonMessage;
- const {add_a_new_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor} = PropertyMessage;
-//  End
-// Logic function
- const{userLoader, loader,handleSubmit, handleChange,errors, users, path, formValues, Status} =PropertyCreateLogic()
- // End
+  //Messages 
+  const {enter_name, submit, cancel, name, status} = CommonMessage;
+  const {add_a_new_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor} = PropertyMessage;
+  //  End
+  // Logic function
+  const{handleSubmit, handleChange, Status, path,userLoader, loader, errors, users, formValues} =PropertyCreateLogic()
+  // End
   return (
     <>
       <div className="card shadow mb-4">

@@ -1,30 +1,28 @@
-import MessageContext from "../../../components/message/context/MessageContext";
-import CommonMessage from "../../../helper/message/CommonMessage";
-import { propertiesValidaions } from "../PropertyValidations";
-import { useContext, useEffect, useState } from "react";
-import {  useNavigate } from "react-router-dom";
-import api from "../../../api/Api";
-import { LIMIT, ORDERBY } from "../../../helper/Constent";
+import createAPI from "../../../api/Api";
+import {useNavigate} from "react-router-dom";
 import Status from "../../../components/status/Status";
+import LogOutLogic from "../../../helper/auth/LogOutLogic";
+import { useContext, useEffect, useState } from "react";
+import { propertiesValidaions } from "../PropertyValidations";
+import CommonMessage from "../../../helper/message/CommonMessage";
+import { LIMIT, ORDERBY, STATUSCODE } from "../../../helper/Constent";
+import MessageContext from "../../../components/message/context/MessageContext";
+
 const PropertyCreateLogic = () => {
+  const {logOut} = LogOutLogic();//Logout
+  // Api
+  const apiCreator = createAPI();
+  const api = apiCreator(); 
+  // End
   // Base path
   const path = '/properties';
   const userPath = '/users';
   // End
-  // Redirect url
-  const navigate = useNavigate();
-  // End
-
+  const navigate = useNavigate();// Redirect url
   const {showMessage} = useContext(MessageContext);//Show message
-
-  //Messages 
-  const { danger, success} = CommonMessage;
-  // End
-  
+  const { danger, success} = CommonMessage; //Messages 
   const [userLoader, setUserLoader] = useState(false);//Loader
-
   const [users, setUsers] = useState([]); //User loader
-
   // Get user
   useEffect(()=>{
     getUsers();
@@ -60,15 +58,19 @@ const PropertyCreateLogic = () => {
         });
       }
     } catch (error) {
-      const message = error.response.data.message;
-        showMessage({
-            message: message,
-            type: danger
-        });
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
     }finally{
-      setUserLoader(false)
+        setUserLoader(false)
+      }
     }
-  }
   // End
 
   // Form value
@@ -144,29 +146,21 @@ const PropertyCreateLogic = () => {
       }
       
     } catch (error) {
-      const message = error.response.data.message;
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
       showMessage({
-        message: message,
-        type: danger
+          message:message,
+          type: danger
       });
     }finally{
-      setLoader(false);
+        setLoader(false);
+      }
     }
-  }
   // End
-  return {
-    path,
-    userLoader,
-    loader,
-    errors,
-    handleSubmit,
-    handleChange,
-    users,
-    path,
-    formValues,
-    Status
-  }
+  return { handleSubmit, handleChange, Status, userLoader, loader, errors, users, path, formValues}
 }
-
-export default PropertyCreateLogic
+export default PropertyCreateLogic;
 

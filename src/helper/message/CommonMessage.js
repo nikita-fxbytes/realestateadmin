@@ -24,6 +24,21 @@ const CommonMessage = {
     select_status:"Select status",
     search: "Search",
     status: "Status",
-    status_required: "Status is required"
+    status_required: "Status is required",
+    email_required: 'Email is required',
+    email_format:"This is not a valid email format",
+    mobile_required: "Mobile is required",
+    mobile_more_than_characters: "Mobile must be more than 10 characters",
+    mobile_cannot_more_than_characters: "Mobile cannot be more than 15 characters",
+    password_required: "Password is required",
+    password_more_than_characters: "Password must be more than 8 characters",
+    password_cannot_more_than_characters: "Password cannot be more than 16 characters",
+    password_formate: "Password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long",
+    email:'Email',
+    mobile:'Mobile',
+    enter_email:'Enter email',
+    enter_mobile:'Enter mobile',
+    password: 'Password',
+    enter_password: 'Enter password'
 }
 export default CommonMessage;

@@ -2,8 +2,8 @@ import CommonMessage from "../../helper/message/CommonMessage";
 import UserMessage from "./UserMessage";
 // User validation
 export const userValidaions =(values)=>{
-  const {name_required, name_more_than_characters, status_required} =CommonMessage;
-  const { email_required, email_format, mobile_required, mobile_more_than_characters, mobile_cannot_more_than_characters, password_required, password_more_than_characters, password_cannot_more_than_characters, password_formate, role_required } = UserMessage
+  const {password_required,name_required, name_more_than_characters, status_required, email_required, email_format, mobile_required, mobile_more_than_characters, mobile_cannot_more_than_characters,password_more_than_characters, password_cannot_more_than_characters, password_formate, } =CommonMessage;
+  const {role_required } = UserMessage
   const errors = {};
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
    const regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;

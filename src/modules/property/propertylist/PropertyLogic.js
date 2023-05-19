@@ -2,17 +2,19 @@ import MessageContext from '../../../components/message/context/MessageContext';
 import  { useContext, useEffect, useRef, useState } from 'react';
 import PropertyMessage from '../PropertyMessage';
 import CommonMessage from '../../../helper/message/CommonMessage';
-import api from '../../../api/Api';
+import createAPI from '../../../api/Api';
 import Pagination from '../../../components/pagination/Pagination';
 import Status from '../../../components/status/Status';
-import { LIMIT, ORDERBY } from '../../../helper/Constent';
+import { LIMIT, ORDERBY, STATUSCODE } from '../../../helper/Constent';
+import LogOutLogic from '../../../helper/auth/LogOutLogic';
 const PropertyLogic = () => {
+  const {logOut} = LogOutLogic();
+  const apiCreator = createAPI();
+  const api = apiCreator(); 
    // Base path
    const path = '/properties';
    // End
- 
    const {showMessage} = useContext(MessageContext);//Show message
- 
    // Message
    const {success, danger} = CommonMessage;
    const {delete_property_message} = PropertyMessage;
@@ -91,18 +93,22 @@ const PropertyLogic = () => {
        const res = await api.post(path, body)
        const resData = res.data;
        if(resData.status === true){
-         setLoader(false);
          setAllProperties(resData.properties)
          setTotalPages(resData.totalPages)
        }
-     } catch (error) {
-       setLoader(false)
-       const message = error.response.data.message;
-         showMessage({
-             message: message,
-             type: danger
-         });
-     }
+     }catch (error) {
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+    }finally{
+      setLoader(false);
+    }
    }
    // End
  

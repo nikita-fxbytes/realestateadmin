@@ -1,26 +1,39 @@
+import createAPI from "../../../api/Api";
+import { STATUSCODE } from "../../../helper/Constent";
 import { useContext, useEffect, useState } from "react";
+import Spinner from '../../../components/spinner/Spinner';
+import { ProfileValidations } from "./ProfileValidations";
+import LogOutLogic from "../../../helper/auth/LogOutLogic";
+import AuthContext from "../../../helper/auth/AuthContext";
 import CommonMessage from "../../../helper/message/CommonMessage";
-import api from "../../../api/Api";
 import MessageContext from "../../../components/message/context/MessageContext";
-
 const ProfileLogic = () => {
+  //Api
+  const apiCreator = createAPI();
+  const api = apiCreator();
+  // End
+  const {logOut} = LogOutLogic();//logout
+  const { setUserName} = useContext(AuthContext);//Set user name 
   const {showMessage} = useContext(MessageContext);//Show message
-  //Message
-  const {success, danger} = CommonMessage;
-  // End
-   // Get role
+  const {success, danger} = CommonMessage;//Message
+  const [loader, setLoader] = useState(false);//Loader
+  const [formLoader, setFormLoader]= useState(false);//Form Loader
+  const intialValues = {
+    name: '',
+    email: '',
+    mobile: ''
+  }
+  const [formValues, setFormValues] = useState(intialValues);//Form value
+  const [errors, setErrors] = useState({});//Error
   useEffect(()=>{
-    getProfileDetails();
-  },[])
-  // End
-   // Get User
-   const [loader, setLoader] = useState(false);//Loader
-   const getProfileDetails = async() =>{
+    getProfileDetails();// Get profile
+  },[]);
+  // Get Profile
+  const getProfileDetails = async() =>{
     setLoader(true);
     try {
       const res = await api.get('/profile')
       const resData = res.data;
-      console.log(resData,":::")
       if(resData.status === true){
         setFormValues(resData.user)
       }else if(resData.status === false){
@@ -35,7 +48,11 @@ const ProfileLogic = () => {
         });
       }
     } catch (error) {
-      const message = error.response.data.message;
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+        logOut();
+      }
+      const message = errorResponse.message;
         showMessage({
             message:message,
             type: danger
@@ -45,15 +62,8 @@ const ProfileLogic = () => {
     }
   }
   // Form value
-  const intialValues = {
-    name: '',
-    email: '',
-    mobile: ''
-  }
-  const [formValues, setFormValues] = useState(intialValues);
-  const [errors, setErrors] = useState({});//Error
-   // Input change
-   const handleChange = (e) =>{
+  // Input change
+  const handleChange = (e) =>{
     let {name, value} = e.target;
     if (name === 'mobile') {
       // restrict input to only numbers for the 'mobile' field
@@ -66,7 +76,62 @@ const ProfileLogic = () => {
     }
   }
   // End
-  return { handleChange, formValues,}
+  // handleSubmit
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+    const errors = ProfileValidations(formValues);
+    setErrors(errors);
+    if(Object.keys(errors).length ===0){
+      const {name, email, mobile } = formValues;
+      const user = {name, email, mobile}
+      updateProfile(user);
+    }
+  }
+  // End
+   // Update user api
+   const updateProfile = async(formValues) => {
+    setFormLoader(true);
+    try {
+      const res = await api.put(`/profile`, formValues)
+      const resData = res.data;
+      if(resData.status === true){
+        showMessage({
+          message: resData.message,
+          type: success
+        });
+        setUserName(resData.user.name)
+      }else if(resData.status === false){
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }else if(resData.status === STATUSCODE.UNAUTHENTICATED){
+        logOut();
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }else{
+        showMessage({
+          message: resData.message,
+          type: danger
+        });
+      }
+    } catch (error) {
+      const errorResponse = error.response.data;
+      if(errorResponse.status=== STATUSCODE.UNAUTHENTICATED){
+          logOut();
+      }
+      const message = errorResponse.message;
+      showMessage({
+          message:message,
+          type: danger
+      });
+    }finally{
+        setFormLoader(false);
+      }
+    }
+  // End
+  return {handleChange, Spinner, handleSubmit, formValues, loader, errors,  formLoader}
 }
-
-export default ProfileLogic
+export default ProfileLogic;

@@ -1,5 +1,5 @@
-import PropertyLogic from './PropertyLogic';
 import { Link } from 'react-router-dom';
+import PropertyLogic from './PropertyLogic';
 import PropertyMessage from '../PropertyMessage';
 import CommonMessage from '../../../helper/message/CommonMessage';
 import Confirmation from '../../../components/confirmation/Confirmation';

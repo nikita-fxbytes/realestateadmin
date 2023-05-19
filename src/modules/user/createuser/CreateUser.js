@@ -6,8 +6,8 @@ import UserMessage from '../UserMessage';
 import CreateUserLogic from "./CreateUserLogic";
 const CreateUser = () => {
     //  Message
-    const {enter_name, submit, cancel, name, role, select_role, status} = CommonMessage;
-    const {add_a_user, enter_email, enter_mobile, email, mobile, password, enter_password} = UserMessage;
+    const {enter_name, password, enter_password, submit, cancel, name, role, select_role, status, enter_email, enter_mobile, email, mobile,} = CommonMessage;
+    const {add_a_user} = UserMessage;
     // End
     //Logical function
     const {path, roleLoader, roles, loader, errors,handleChange, handleSubmit, Status, formValues} = CreateUserLogic();

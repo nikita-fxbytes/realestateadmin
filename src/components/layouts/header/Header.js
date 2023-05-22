@@ -1,7 +1,9 @@
+import LayoutMessages from "../LayoutMessages";
 import HeaderLogic from "./HeaderLogic";
 import { NavLink } from "react-router-dom";
 const Header = () => {
     const {logOut, userName } = HeaderLogic();//Logic 
+    const {profile, settings, logout} = LayoutMessages
     return (
         <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
             <button id="sidebarToggleTop" className="btn btn-link d-md-none rounded-circle mr-3">
@@ -19,17 +21,17 @@ const Header = () => {
                         aria-labelledby="userDropdown">
                         <NavLink className="dropdown-item" to="profile">
                             <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Profile
+                            {profile}
                         </NavLink>
                         <a className="dropdown-item" href="#">
                             <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Settings
+                            {settings}
                         </a>
                         
                         <div className="dropdown-divider"></div>
                         <a className="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" onClick={logOut}>
                             <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Logout
+                            {logout}
                         </a>
                     </div>
                 </li>

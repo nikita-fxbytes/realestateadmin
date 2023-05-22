@@ -21,6 +21,10 @@ const PropertyMessage = {
     select_property_realtor: "Select property realtor",
     propertyRealtor_required: "Property realtor is required",
     delete_property_message: 'Are you sure you want to delete this property?',
-    property_realtor_mobile_number: "Property realtor mobile number"
+    property_realtor_mobile_number: "Property realtor mobile number",
+    squarefeet_required: "Squarefeet is required",
+    bedrooms_required: "Bedrooms is required",
+    bathrooms_required: "Bathrooms is required",
+    location_required: "Location is required"
 }
 export default PropertyMessage;

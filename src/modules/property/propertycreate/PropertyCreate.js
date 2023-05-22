@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import PropertyMessage from '../PropertyMessage';
 import PropertyCreateLogic from "./PropertyCreateLogic";
 import CommonMessage from "../../../helper/message/CommonMessage";
+import { STATUS } from "../../../helper/Constent";
+import { useState } from "react";
 const PropertyCreate = () => {
+  const [getStatus, setStatus] = useState(STATUS);
   //Messages 
   const {enter_name, submit, cancel, name, status} = CommonMessage;
   const {add_a_new_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor} = PropertyMessage;
@@ -35,14 +38,16 @@ const PropertyCreate = () => {
               </div>
               <div className="col-lg-6 col-md-6">
                 <div className="form-group mb-2">
-                  <label>{location}</label>
+                  <label>{location}<span className="text-danger">*</span></label>
                   <input type="text" className="form-control form-control-user" name="location" placeholder={enter_location} onChange={handleChange}/>
+                  {errors.location && <label className="text-danger mb-0"> {errors.location}</label>}
                 </div>              
               </div>
               <div className="col-lg-6 col-md-6">
                 <div className="form-group mb-2">
-                  <label>{square_feet}</label>
+                  <label>{square_feet}<span className="text-danger">*</span></label>
                   <input type="text" className="form-control form-control-user" name="squareFeet" placeholder={enter_square_feet} onChange={handleChange} value={formValues.squareFeet}/>
+                  {errors.squareFeet && <label className="text-danger mb-0"> {errors.squareFeet}</label>}
                 </div>              
               </div>
               <div className="col-lg-6 col-md-6">
@@ -53,14 +58,16 @@ const PropertyCreate = () => {
               </div>
               <div className="col-lg-6 col-md-6">
                 <div className="form-group mb-2">
-                  <label>{bedrooms}</label>
+                  <label>{bedrooms}<span className="text-danger">*</span></label>
                   <input type="text" className="form-control form-control-user" name="bedrooms" placeholder={enter_bedrooms} onChange={handleChange} value={formValues.bedrooms}/>
+                  {errors.bedrooms && <label className="text-danger mb-0"> {errors.bedrooms}</label>}
                 </div>              
               </div>
               <div className="col-lg-6 col-md-6">
                 <div className="form-group">
-                  <label>{bathrooms}</label>
+                  <label>{bathrooms}<span className="text-danger">*</span></label>
                   <input type="text" className="form-control form-control-user" name="bathrooms" placeholder={enter_bathrooms} onChange={handleChange} value={formValues.bathrooms}/>
+                  {errors.bathrooms && <label className="text-danger mb-0"> {errors.bathrooms}</label>}
                 </div>              
               </div>
               <div className="col-lg-6 col-md-6">
@@ -85,7 +92,7 @@ const PropertyCreate = () => {
               <div className="col-lg-6 col-md-6">
                   <div className="form-group mb-0">
                     <label>{status}<span className="text-danger">*</span></label>
-                    <Status handleChange={handleChange} value={formValues.status}/>
+                    <Status handleChange={handleChange} value={formValues.status} data={getStatus}/>
                     {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
                   </div>              
               </div>

@@ -2,7 +2,7 @@ import MessageContext from '../../../components/message/context/MessageContext';
 import Pagination from '../../../components/pagination/Pagination';
 import CommonMessage from '../../../helper/message/CommonMessage';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { LIMIT, ORDERBY } from '../../../helper/Constent';
+import { LIMIT, ORDERBY, STATUS } from '../../../helper/Constent';
 import createAPI from '../../../api/Api';
 import Status from '../../../components/status/Status'
 const RoleLogic = () => {
@@ -22,8 +22,8 @@ const RoleLogic = () => {
   const [totalPages, setTotalPages] = useState(LIMIT.ITEMZERO);
   const [perPage, setPerPage] = useState(LIMIT.ITEMTEN);
   const [page, setPage] = useState(LIMIT.ITEMONE);
-  const [onlyActive, setOnlyActive] = useState("");
-  const [status, setStatus]= useState("");
+  const [currentStatus, setCurrentStatus]= useState("");
+  const [getStatus, setgetStatus] = useState(STATUS);
   // Search
   const seach = (e)=>{
       setSearchTerm(e.target.value)
@@ -61,14 +61,14 @@ const RoleLogic = () => {
     getRole();
   };
   const statusSearch = (e)=>{
-    setStatus(e.target.value)
+    setCurrentStatus(e.target.value)
     getRole()
   }
   // End
   // Get roles
   useEffect(()=>{
     getRole();
-  },[sortColumn, sortDirection, status, searchTerm])
+  },[sortColumn, sortDirection, currentStatus, searchTerm])
    // Get Role api
    const getRole = async() =>{
     setLoader(true);
@@ -79,8 +79,8 @@ const RoleLogic = () => {
         sortDirection: sortDirection,
         page: page, // new pagination params
         perPage: perPage, // new pagination params,
-        onlyActive: onlyActive,
-        status: status
+        onlyActive: '',
+        status: currentStatus
       };
       const res = await api.post(path, body)
       const resData = res.data;
@@ -162,7 +162,7 @@ const RoleLogic = () => {
   // end
   return {
     seach, current, handleSort, Pagination, handleDelete, areUSureDelete, handleNextPage, handlePreviousPage, statusSearch, Status,
-    page, path, roles, dialog, loader, perPage, searchTerm, totalPages, deleteLoader
+    page, path, roles, dialog, loader, perPage, searchTerm, totalPages, deleteLoader, currentStatus, getStatus
   }
 }
 export default RoleLogic;

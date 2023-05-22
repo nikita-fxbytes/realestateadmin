@@ -5,12 +5,13 @@ import { dateFormate } from '../../../helper/CommonFunction';
 import Spinner from '../../../components/spinner/Spinner';
 import { Link } from 'react-router-dom';
 import RoleLogic from './RoleListLogic';
+
 const RoleList = () => {
   const {name, created_at, action, role, add, search, status, no_data_found} = CommonMessage;// Message
   //Logic function
   const { 
     seach, current, handleSort, Pagination, handleDelete, areUSureDelete, handleNextPage, handlePreviousPage, statusSearch, Status,
-    page, path, roles, dialog, loader, perPage, searchTerm, totalPages, deleteLoader }= RoleLogic();   // End   
+    page, path, roles, dialog, loader, perPage, searchTerm, totalPages, deleteLoader, currentStatus, getStatus }= RoleLogic();   // End   
   return (
     <>
       <div className="card shadow mb-4">
@@ -24,7 +25,7 @@ const RoleList = () => {
           <div className='row justify-content-end mb-3'>
             <div className='col-lg-4 col-md-2 col-12'>
               <div className='d-flex'>
-                <Status handleChange={statusSearch} value=''/>
+                <Status handleChange={statusSearch} value={currentStatus} data={getStatus}/>
                 <input type="text" placeholder={search} className='form-control ml-2' value={searchTerm} onChange={seach}/>
               </div>
               

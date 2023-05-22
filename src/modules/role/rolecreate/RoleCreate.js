@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import CommonMessage from "../../../helper/message/CommonMessage";
 import RoleCreateLogic from "./RoleCreateLogic";
+import { STATUS } from "../../../helper/Constent";
+import { useState } from "react";
 const RoleCreate = () => {
+  const [getStatus, setStatus] = useState(STATUS);
   const {add_a_new_role, enter_name, submit, cancel, name, status} = CommonMessage;
   //Logic function
   const { handleSubmit, handleChange, 
@@ -27,7 +30,7 @@ const RoleCreate = () => {
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group mb-0">
                     <label>{status}<span className="text-danger">*</span></label>
-                    <Status handleChange={handleChange} value={formValues.status}/>
+                    <Status handleChange={handleChange} value={formValues.status} data={getStatus}/>
                     {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
                   </div>              
                 </div>

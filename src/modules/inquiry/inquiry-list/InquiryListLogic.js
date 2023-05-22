@@ -1,26 +1,26 @@
 import MessageContext from '../../../components/message/context/MessageContext';
 import  { useContext, useEffect, useRef, useState } from 'react';
-import PropertyMessage from '../PropertyMessage';
 import CommonMessage from '../../../helper/message/CommonMessage';
 import createAPI from '../../../api/Api';
 import Status from '../../../components/status/Status';
-import { LIMIT, ORDERBY, STATUS, STATUSCODE } from '../../../helper/Constent';
+import { LIMIT, ORDERBY, STATUSCODE, STATUSREAD } from '../../../helper/Constent';
 import LogOutLogic from '../../../helper/auth/LogOutLogic';
-const PropertyLogic = () => {
+import InquiryMessages from '../InquiryMessages';
+const InquiryListLogic = () => {
   const {logOut} = LogOutLogic();
   const apiCreator = createAPI();
   const api = apiCreator(); 
    // Base path
-   const path = '/properties';
+   const path = '/inquiries';
    // End
    const {showMessage} = useContext(MessageContext);//Show message
    // Message
    const {success, danger} = CommonMessage;
-   const {delete_property_message} = PropertyMessage;
+   const {delete_inquiry_message} = InquiryMessages;
    // End
  
    const [loader, setLoader]= useState(false)// lodader
-   const [allProperties, setAllProperties] = useState([])
+   const [allInquiries, setAllInquiries] = useState([])
  // filter
  const [sortDirection, setSortDirection] = useState(ORDERBY.DESC);
  const [sortColumn, setSortColumn] = useState(ORDERBY.CREATEDAT);
@@ -28,13 +28,12 @@ const PropertyLogic = () => {
  const [totalPages, setTotalPages] = useState(LIMIT.ITEMZERO);
  const [perPage, setPerPage] = useState(LIMIT.ITEMTEN);
  const [page, setPage] = useState(LIMIT.ITEMONE);
- const [onlyActive, setOnlyActive] = useState("");
  const [currentStatus, setCurrentStatus]= useState("");
- const [getStatus, setgetStatus] = useState(STATUS);
+  const [getStatus, setgetStatus] = useState(STATUSREAD);
  // Search
  const seach = (e)=>{
     setSearchTerm(e.target.value)
-    getProperties()
+    getInquiries()
  };
  // End
  // Sorting
@@ -47,38 +46,38 @@ const PropertyLogic = () => {
        setSortColumn(column);
        setSortDirection(ORDERBY.ASC);
    }
-   getProperties()
+   getInquiries()
  };
  // End
  // Pagination
  const handlePreviousPage = () => {
    if (page > LIMIT.ITEMONE) {
      setPage(page - LIMIT.ITEMONE);
-     getProperties();
+     getInquiries();
    }
  };
  const handleNextPage = () => {
    if (page < totalPages) {
      setPage(page + LIMIT.ITEMONE);
-     getProperties();
+     getInquiries();
    }
  };
  const current = (page) =>{
    setPage(page)
-   getProperties();
+   getInquiries();
  };
  const statusSearch = (e)=>{
   setCurrentStatus(e.target.value)
-   getProperties()
+   getInquiries()
  }
  // End
-   // Get property
+   // Get inquiry
    useEffect(()=>{
-     getProperties();
+     getInquiries();
    },[sortColumn, sortDirection, currentStatus, searchTerm])
    // End
-    // Get property api
-    const getProperties = async() =>{
+    // Get inquiry api
+    const getInquiries = async() =>{
      setLoader(true);
      try {
       const body = {
@@ -87,13 +86,13 @@ const PropertyLogic = () => {
         sortDirection: sortDirection,
         page: page, // new pagination params
         perPage: perPage, // new pagination params,
-        onlyActive: onlyActive,
+        onlyActive: '',
         status: currentStatus
       };
        const res = await api.post(path, body)
        const resData = res.data;
        if(resData.status === true){
-         setAllProperties(resData.properties)
+         setAllInquiries(resData.inquiries)
          setTotalPages(resData.totalPages)
        }
      }catch (error) {
@@ -112,7 +111,7 @@ const PropertyLogic = () => {
    }
    // End
  
-   // Delete property
+   // Delete inquiry
    // Dialog box
    const [dialog, setDiaLog] = useState({
      message:'',
@@ -120,7 +119,7 @@ const PropertyLogic = () => {
    });
    const [deleteLoader, setDeleteLoader] = useState(false)
    // end
-   const idPropertyRef = useRef();
+   const idInquiryRef = useRef();
    const handleDiaLog = (message, isLoading)=>{
      setDiaLog({
        message:message,
@@ -129,23 +128,23 @@ const PropertyLogic = () => {
    }
    
    const handleDelete = (id) =>{
-     handleDiaLog(delete_property_message, true)
-     idPropertyRef.current = id;
+     handleDiaLog(delete_inquiry_message, true)
+     idInquiryRef.current = id;
    }
    const areUSureDelete = async (choose) =>{
      if(choose){
        setDeleteLoader(true);
        try {
-         const res = await api.delete(`${path}/${idPropertyRef.current}`);
+         const res = await api.delete(`${path}/${idInquiryRef.current}`);
          const resData = res.data;
          if(resData.status === true){
-           const newProperties = allProperties.filter((property)=>property._id !==idPropertyRef.current)
-           setAllProperties(newProperties);
+           const newInquiry = allInquiries.filter((inquiry)=>inquiry._id !==idInquiryRef.current)
+           setAllInquiries(newInquiry);
            showMessage({
              message:resData.message,
              type:success
            });
-           setDeleteLoader(false);
+          
          }
        
        } catch (error) {
@@ -154,7 +153,8 @@ const PropertyLogic = () => {
              message:message,
              type:danger
          });
-         setDeleteLoader(false);
+       }finally{
+        setDeleteLoader(false);
        }
        handleDiaLog("", false)
      }else{
@@ -162,11 +162,47 @@ const PropertyLogic = () => {
      }
    }
    // end
+  //  handleMarkAsRead
+  const handleMarkAsRead = async (id) =>{
+    setDeleteLoader(true);
+    try {
+      const res = await api.put(`${path}/${id}/mark-as-read`);
+      const resData = res.data;
+      if(resData.status === true){
+        getInquiries();
+        showMessage({
+          message:resData.message,
+          type:success
+        });
+
+      }else if(resData.status === false){
+        showMessage({
+          message:resData.message,
+          type:danger
+        });
+      }else{
+        showMessage({
+          message:resData.message,
+          type:danger
+        });
+      }
+    
+    } catch (error) {
+      const message = error.response.data.message;
+      showMessage({
+          message:message,
+          type:danger
+      });
+    }finally{
+      setDeleteLoader(false);
+    }
+  }
+  // End
 
   return {
-    loader, allProperties, handleDelete, deleteLoader,  areUSureDelete, path, dialog, getStatus, currentStatus,
-    seach, current, handleSort ,handleNextPage, handlePreviousPage, statusSearch, Status,page,perPage, searchTerm, totalPages
+    handleDelete, seach, current, handleSort ,handleNextPage, handlePreviousPage, statusSearch, Status,areUSureDelete, handleMarkAsRead,
+    loader, allInquiries, deleteLoader, path, dialog ,page, perPage, searchTerm, totalPages, getStatus, 
   };
 };
 
-export default PropertyLogic;
+export default InquiryListLogic;

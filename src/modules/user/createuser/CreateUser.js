@@ -4,7 +4,10 @@ import CommonMessage from "../../../helper/message/CommonMessage";
 import { Link } from "react-router-dom";
 import UserMessage from '../UserMessage';
 import CreateUserLogic from "./CreateUserLogic";
+import { useState } from "react";
+import { STATUS } from "../../../helper/Constent";
 const CreateUser = () => {
+  const [getStatus, setStatus] = useState(STATUS);
     //  Message
     const {enter_name, password, enter_password, submit, cancel, name, role, select_role, status, enter_email, enter_mobile, email, mobile,} = CommonMessage;
     const {add_a_user} = UserMessage;
@@ -68,7 +71,7 @@ const CreateUser = () => {
               <div className="col-lg-6 col-md-6">
                 <div className="form-group mb-0">
                   <label>{status}<span className="text-danger">*</span></label>
-                  <Status handleChange={handleChange} value={formValues.status}/>
+                  <Status handleChange={handleChange} value={formValues.status} data={getStatus}/>
                   {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
                 </div>              
               </div>

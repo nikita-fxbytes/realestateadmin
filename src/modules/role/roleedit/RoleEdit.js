@@ -1,8 +1,11 @@
 import { Link} from "react-router-dom";
 import CommonMessage from "../../../helper/message/CommonMessage";
 import RoleEditLogic from "./RoleEditLogic";
+import { useState } from "react";
+import { STATUS } from "../../../helper/Constent";
 
 const RoleEdit = () => {
+  const [getStatus, setStatus] = useState(STATUS);
   const {edit_role, enter_name, update, cancel, name, status} = CommonMessage;//Message
   const { handleSubmit, handleChange, Status,
           errors, formValues, loader, path} = RoleEditLogic()
@@ -26,7 +29,7 @@ const RoleEdit = () => {
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group mb-0">
                     <label>{status}<span className="text-danger">*</span></label>
-                    <Status handleChange={handleChange} value={formValues.status}/>
+                    <Status handleChange={handleChange} value={formValues.status} data={getStatus}/>
                     {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
                   </div>              
                 </div>

@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import CommonMessage from '../../../helper/message/CommonMessage';
 import UserMessage from '../UserMessage';
 import createAPI from '../../../api/Api';
-import { LIMIT, ORDERBY, STATUSCODE } from '../../../helper/Constent';
+import { LIMIT, ORDERBY, STATUS, STATUSCODE } from '../../../helper/Constent';
 import Pagination from '../../../components/pagination/Pagination';
 import Status from '../../../components/status/Status';
 import LogOutLogic from '../../../helper/auth/LogOutLogic';
@@ -27,8 +27,8 @@ const UsersListLogic = () => {
    const [totalPages, setTotalPages] = useState(LIMIT.ITEMZERO);
    const [perPage, setPerPage] = useState(LIMIT.ITEMTEN);
    const [page, setPage] = useState(LIMIT.ITEMONE);
-   const [onlyActive, setOnlyActive] = useState("");
-   const [status, setStatus]= useState("");
+  const [currentStatus, setCurrentStatus]= useState("");
+  const [getStatus, setgetStatus] = useState(STATUS);
    // Search
    const seach = (e)=>{
       setSearchTerm(e.target.value)
@@ -66,14 +66,14 @@ const UsersListLogic = () => {
      getUsers();
    };
    const statusSearch = (e)=>{
-     setStatus(e.target.value)
+    setCurrentStatus(e.target.value)
      getUsers()
    }
    // End
   // Get user
   useEffect(()=>{
     getUsers();
-  },[sortColumn, sortDirection, status, searchTerm])
+  },[sortColumn, sortDirection, currentStatus, searchTerm])
   // End
    // Get user api
    const getUsers = async() =>{
@@ -86,8 +86,8 @@ const UsersListLogic = () => {
         page: page,
         perPage: perPage,
         roleName: "",
-        onlyActive: onlyActive,
-        status: status
+        onlyActive: '',
+        status: currentStatus
       };
       const res = await api.post(path, body)
       const resData = res.data;
@@ -173,7 +173,7 @@ const UsersListLogic = () => {
   // end
   return {
     handleDelete, areUSureDelete, Pagination, seach, current, handleSort, handleNextPage, handlePreviousPage, statusSearch, Status,
-    deleteLoader, dialog, loader, allUsers, path, page, perPage, searchTerm, totalPages,
+    deleteLoader, dialog, loader, allUsers, path, page, perPage, searchTerm, totalPages, currentStatus, getStatus
   }
 }
 export default UsersListLogic;

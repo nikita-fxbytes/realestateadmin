@@ -3,10 +3,13 @@ import { Link} from "react-router-dom";
 import CommonMessage from "../../../helper/message/CommonMessage";
 import UserMessage from '../UserMessage';
 import EditUserLogic from "./EditUserLogic";
+import { useState } from "react";
+import { STATUS } from "../../../helper/Constent";
 const EditUSer = () => {
+  const [getStatus, setStatus] = useState(STATUS);
   //Message
-  const {enter_name, update, cancel, name, role, select_role, status,email, mobile, enter_email, enter_mobile,} = CommonMessage;
-  const {edit_user,   password, enter_password} = UserMessage;
+  const {enter_name, update, cancel, name, role, select_role, status,email, mobile, enter_email, enter_mobile, password, enter_password} = CommonMessage;
+  const {edit_user} = UserMessage;
   const {handleSubmit, handleChange, loader, formValues, errors, roleLoader, roles, Status} = EditUserLogic()
   return (
     <>
@@ -65,7 +68,7 @@ const EditUSer = () => {
                 <div className="col-lg-6 col-md-6">
                 <div className="form-group mb-0">
                   <label>{status}<span className="text-danger">*</span></label>
-                  <Status handleChange={handleChange} value={formValues.status}/>
+                  <Status handleChange={handleChange} value={formValues.status} data={getStatus}/>
                   {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
                 </div>              
               </div>

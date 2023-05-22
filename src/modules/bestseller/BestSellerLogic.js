@@ -10,7 +10,7 @@ const BestSellerLogic = () => {
   const api = apiCreator(); 
    const {showMessage} = useContext(MessageContext);//Show message
    // Message
-   const {success, danger} = CommonMessage;
+   const { danger} = CommonMessage;
    // End
  
    const [loader, setLoader]= useState(false)// lodader
@@ -96,18 +96,6 @@ const BestSellerLogic = () => {
       setLoader(false);
     }
    }
-   // End
- 
-   // Delete inquiry
-   // Dialog box
-   
-
-   // end
-  
-   
-  
-
-
   return {
     seach, current, handleSort ,handleNextPage, handlePreviousPage, 
     loader, allRetator ,page, perPage, searchTerm, totalPages, 

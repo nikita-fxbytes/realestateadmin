@@ -2,8 +2,9 @@ import CommonMessage from "../../helper/message/CommonMessage";
 import PropertyMessage from "./PropertyMessage";
 // User validation
 export const propertiesValidaions =(values)=>{
-  const {name_required, name_more_than_characters} = CommonMessage;
-  const {price_required, propertyRealtor_required, location_required, squarefeet_required, bedrooms_required, bathrooms_required} = PropertyMessage;
+  console.log(values)
+  const {name_required, name_more_than_characters, status_required} = CommonMessage;
+  const {price_required, propertyRealtor_required, location_required, squarefeet_required, bedrooms_required, bathrooms_required, description_required} = PropertyMessage;
   const errors = {};
   // Name
   if (!values.name){
@@ -16,9 +17,9 @@ export const propertiesValidaions =(values)=>{
     errors.price= price_required;
   }
   // location
-  // if(!values.location){
-  //   errors.location= location_required;
-  // }
+  if(!values.location){
+    errors.location= location_required;
+  }
   // squareFeet
   if(!values.squareFeet){
     errors.squareFeet= squarefeet_required;
@@ -34,6 +35,14 @@ export const propertiesValidaions =(values)=>{
   // propertyRealtor
   if(!values.propertyRealtor){
     errors.propertyRealtor = propertyRealtor_required
+  }
+  // propertyRealtor
+  if(!values.status){
+    errors.status = status_required
+  }
+   // propertyRealtor
+   if(!values.description){
+    errors.description = description_required
   }
   return errors;
 }

@@ -129,7 +129,8 @@ const PropertyEditLogic = () => {
     bedrooms: '',
     bathrooms: '',
     propertyRealtor: '',
-    status:''
+    status:'',
+    description:''
   }
   const [formValues, setFormValues] = useState(intialValues);
   const [errors, setErrors] = useState({});//Error
@@ -159,8 +160,9 @@ const PropertyEditLogic = () => {
     const errors = propertiesValidaions(formValues);
     setErrors(errors);
     if(Object.keys(errors).length ===0){
-      const {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status } = formValues;
-      const properties = {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status}
+      const {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status, description } = formValues;
+      const properties = {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status, description}
+      console.log(properties)
       updateProperty(properties);
     }
   }

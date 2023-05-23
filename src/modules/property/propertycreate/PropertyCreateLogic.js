@@ -84,7 +84,9 @@ const PropertyCreateLogic = () => {
     bedrooms: '',
     bathrooms: '',
     propertyRealtor: '',
-    status: LIMIT.ITEMONE
+    description:'',
+    status: LIMIT.ITEMONE,
+    
   }
   const [formValues, setFormValues] = useState(intialValues);
   const [errors, setErrors] = useState({});//Error
@@ -112,11 +114,12 @@ const PropertyCreateLogic = () => {
   // Submit Form
   const handleSubmit = (e) =>{
     e.preventDefault();
+    console.log(formValues,"::::")
     const errors = propertiesValidaions(formValues);
     setErrors(errors);
     if(Object.keys(errors).length ===0){
-      const {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status } = formValues;
-      const properties = {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status}
+      const {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status, description } = formValues;
+      const properties = {name, price, location, squareFeet, garage, bedrooms, bathrooms, propertyRealtor, status, description}
       addProperty(properties);
     }
   }

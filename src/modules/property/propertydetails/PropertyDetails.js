@@ -6,8 +6,8 @@ import PropertyMessage from '../PropertyMessage';
 import PropertyDetailsLogic from './PropertyDetailsLogic';
 const PropertyDetails = () => {
   // Message
-  const {name, edit, no_data_found} = CommonMessage;
-  const {price,location, square_feet, garage, bedrooms, bathrooms, property_realtor, propert_details, property_realtor_mobile_number} = PropertyMessage;
+  const {name, edit, no_data_found, status} = CommonMessage;
+  const {price,location, square_feet, garage, bedrooms, bathrooms, property_realtor, propert_details, property_realtor_mobile_number, description} = PropertyMessage;
   // End
     const {path,  loader, properties, id} = PropertyDetailsLogic()
 
@@ -86,6 +86,18 @@ const PropertyDetails = () => {
                     <div className='form-group'>
                         <label>{property_realtor_mobile_number}</label>
                         <p>{properties.propertyRealtor && properties.propertyRealtor.mobile ?  properties.propertyRealtor.mobile: ''}</p>
+                    </div>
+                </div>
+                <div className="col-lg-4 col-md-4 col-12">
+                    <div className='form-group'>
+                        <label>{status}</label>
+                        <p className={properties.status== 1 ? 'text-success':'text-danger'}>{properties.statusText ??''}</p>
+                    </div>
+                </div>
+                <div className="col-lg-4 col-md-4 col-12">
+                    <div className='form-group'>
+                        <label>{description}</label>
+                        <p>{properties.description??''}</p>
                     </div>
                 </div>
             </div>:

@@ -25,6 +25,9 @@ const PropertyMessage = {
     squarefeet_required: "Squarefeet is required",
     bedrooms_required: "Bedrooms is required",
     bathrooms_required: "Bathrooms is required",
-    location_required: "Location is required"
+    location_required: "Location is required",
+    description_required: "Description is required",
+    description: "Description",
+    write_here: "Write here..."
 }
 export default PropertyMessage;

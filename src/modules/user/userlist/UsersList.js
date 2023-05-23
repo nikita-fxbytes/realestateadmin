@@ -8,8 +8,7 @@ import { Link } from 'react-router-dom';
 import UsersListLogic from './UsersListLogic';
 const UsersList = () => {
     // Message 
-     const {name, created_at, action, add, role, users, status, search} = CommonMessage;
-    const {email, mobile} = UserMessage;
+     const {name, created_at, action, add, role, users, status, search, mobile, email} = CommonMessage;
     // End
     //Logic function
     const { handleDelete, areUSureDelete, Pagination, seach, current, handleSort, handleNextPage, handlePreviousPage, statusSearch, Status,

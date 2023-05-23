@@ -8,7 +8,7 @@ const PropertyEdit = () => {
   const [getStatus, setStatus] = useState(STATUS);
   // Message
   const {enter_name, update, cancel, name, status} = CommonMessage;
-  const {edit_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor} = PropertyMessage;
+  const {edit_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor, description, write_here} = PropertyMessage;
   // End
   const { userLoader,
     users, loader, errors, handleChange, handleUpdate, formValues, path, Status} = PropertyEditLogic()
@@ -93,6 +93,13 @@ const PropertyEdit = () => {
                     <label>{status}<span className="text-danger">*</span></label>
                     <Status handleChange={handleChange} value={formValues.status} data={getStatus}/>
                     {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
+                  </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                  <div className="form-group mb-0">
+                    <label>{description}<span className="text-danger">*</span></label>
+                    <textarea placeholder={write_here} name="description" className="form-control" row="2" onChange={handleChange}></textarea>
+                    {errors.description && <label className="text-danger mb-0"> {errors.description}</label>}
                   </div>              
               </div>
             </div>

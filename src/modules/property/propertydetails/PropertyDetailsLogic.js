@@ -2,8 +2,10 @@ import MessageContext from '../../../components/message/context/MessageContext';
 import  { useContext, useEffect, useState } from 'react';
 import CommonMessage from '../../../helper/message/CommonMessage';
 import { useParams } from 'react-router-dom';
-import api from '../../../api/Api';
+import createAPI from '../../../api/Api';
 const PropertyDetailsLogic = () => {
+  const apiCreator = createAPI();
+  const api = apiCreator(); 
   // Base path
   const path = '/properties';
   // End
@@ -28,16 +30,27 @@ const PropertyDetailsLogic = () => {
         const res = await api.get(`${path}/${propertyId}`)
         const resData = res.data;
         if(resData.status === true){
-            setLoader(false);
             setProperty(resData.property)
+        }else if(resData.status === false){
+          showMessage({
+            message: resData.message,
+            type: danger
+          });
+        }else{
+          showMessage({
+            message: resData.message,
+            type: danger
+          });
         }
     } catch (error) {
-      setLoader(false)
+      console.log(error)
       const message = error.response.data.message;
         showMessage({
             message: message,
             type: danger
         });
+    }finally{
+      setLoader(false);
     }
   }
   // End

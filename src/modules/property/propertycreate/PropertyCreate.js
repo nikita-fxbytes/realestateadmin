@@ -8,7 +8,7 @@ const PropertyCreate = () => {
   const [getStatus, setStatus] = useState(STATUS);
   //Messages 
   const {enter_name, submit, cancel, name, status} = CommonMessage;
-  const {add_a_new_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor} = PropertyMessage;
+  const {add_a_new_property, price, location, square_feet, garage, bedrooms, bathrooms, property_realtor, enter_price, enter_location, enter_square_feet, enter_garage, enter_bedrooms, enter_bathrooms, select_property_realtor, description, write_here} = PropertyMessage;
   //  End
   // Logic function
   const{handleSubmit, handleChange, Status, path,userLoader, loader, errors, users, formValues} =PropertyCreateLogic()
@@ -94,6 +94,13 @@ const PropertyCreate = () => {
                     <label>{status}<span className="text-danger">*</span></label>
                     <Status handleChange={handleChange} value={formValues.status} data={getStatus}/>
                     {errors.status && <label className="text-danger mb-0"> {errors.status}</label>}
+                  </div>              
+              </div>
+              <div className="col-lg-6 col-md-6">
+                  <div className="form-group mb-0">
+                    <label>{description}<span className="text-danger">*</span></label>
+                    <textarea placeholder={write_here} name="description" className="form-control" row="2" onChange={handleChange}></textarea>
+                    {errors.description && <label className="text-danger mb-0"> {errors.description}</label>}
                   </div>              
               </div>
             </div>

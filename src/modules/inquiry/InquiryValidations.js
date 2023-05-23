@@ -2,7 +2,7 @@ import CommonMessage from "../../helper/message/CommonMessage";
 import InquiryMessages from "./InquiryMessages";
 // User validation
 export const inquiryValidaions =(values)=>{
-    const {name_required, name_more_than_characters, email_required, email_format, mobile_required, mobile_more_than_characters, mobile_cannot_more_than_characters, } =CommonMessage;
+    const {name_required, name_more_than_characters, email_required, email_format, mobile_required, mobile_more_than_characters, mobile_cannot_more_than_characters } =CommonMessage;
     const {property_required, message_required } = InquiryMessages
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;

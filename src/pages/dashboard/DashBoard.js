@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom"
-import DashBoardLogic from "./DashBoardLogic";
+import DashBoardLogic from "./DashboardLogic";
 import Spinner from '../../components/spinner/Spinner'
 import CommonMessage from '../../helper/message/CommonMessage';
 const DashBoard = () => {

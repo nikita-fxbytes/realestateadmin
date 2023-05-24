@@ -62,6 +62,7 @@ function App() {
                 <Route path="/inquiries/*" element={<InquiryRoutes/>}/>
                 <Route path="profile" element={<Suspense fallback={<div>Loading...</div>}><AuthProfile/></Suspense>} />
                 <Route path="best-seller" element={<Suspense fallback={<div>Loading...</div>}><AuthBestSeller/></Suspense>} />
+                
               </Routes>
             </div>
           </div>

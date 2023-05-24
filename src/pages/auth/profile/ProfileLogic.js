@@ -1,7 +1,6 @@
 import createAPI from "../../../api/Api";
 import { STATUSCODE } from "../../../helper/Constent";
 import { useContext, useEffect, useState } from "react";
-import Spinner from '../../../components/spinner/Spinner';
 import { ProfileValidations } from "./ProfileValidations";
 import LogOutLogic from "../../../helper/auth/LogOutLogic";
 import AuthContext from "../../../helper/auth/AuthContext";
@@ -132,6 +131,6 @@ const ProfileLogic = () => {
       }
     }
   // End
-  return {handleChange, Spinner, handleSubmit, formValues, loader, errors,  formLoader}
+  return {handleChange, handleSubmit, formValues, loader, errors,  formLoader}
 }
 export default ProfileLogic;

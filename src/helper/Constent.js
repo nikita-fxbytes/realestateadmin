@@ -20,3 +20,6 @@ export const STATUSREAD = [
     {id: true, name: 'Read'},
     {id: false, name: 'Unread'}
 ];
+export const ROLENAME={
+    REALTOR: "realtor"
+}

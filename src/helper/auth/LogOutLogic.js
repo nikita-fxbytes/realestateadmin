@@ -13,4 +13,4 @@ const LogOutLogic = () => {
   }
 }
 
-export default LogOutLogic
+export default LogOutLogic;

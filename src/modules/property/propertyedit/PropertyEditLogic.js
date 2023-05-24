@@ -5,7 +5,7 @@ import MessageContext from "../../../components/message/context/MessageContext";
 import { propertiesValidaions } from "../PropertyValidations";
 import createAPI from '../../../api/Api'
 import Status from "../../../components/status/Status";
-import { LIMIT, ORDERBY, STATUSCODE } from "../../../helper/Constent";
+import { LIMIT, ORDERBY, ROLENAME, STATUSCODE } from "../../../helper/Constent";
 import LogOutLogic from '../../../helper/auth/LogOutLogic'
 const PropertyEditLogic = () => {
   const {logOut} = LogOutLogic();
@@ -48,7 +48,7 @@ const PropertyEditLogic = () => {
         sortDirection: ORDERBY.DESC, 
         page: '',
         perPage: '',
-        roleName: 'propertyrealtor',
+        roleName: ROLENAME.REALTOR,
         onlyActive: LIMIT.ITEMONE,
         status: ''
       };

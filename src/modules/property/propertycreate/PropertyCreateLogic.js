@@ -5,7 +5,7 @@ import LogOutLogic from "../../../helper/auth/LogOutLogic";
 import { useContext, useEffect, useState } from "react";
 import { propertiesValidaions } from "../PropertyValidations";
 import CommonMessage from "../../../helper/message/CommonMessage";
-import { LIMIT, ORDERBY, STATUSCODE } from "../../../helper/Constent";
+import { LIMIT, ORDERBY, ROLENAME, STATUSCODE } from "../../../helper/Constent";
 import MessageContext from "../../../components/message/context/MessageContext";
 
 const PropertyCreateLogic = () => {
@@ -38,7 +38,7 @@ const PropertyCreateLogic = () => {
         sortDirection: ORDERBY.DESC, 
         page: '',
         perPage: '',
-        roleName: 'propertyrealtor',
+        roleName: ROLENAME.REALTOR,
         onlyActive: LIMIT.ITEMONE,
         status: ''
       };

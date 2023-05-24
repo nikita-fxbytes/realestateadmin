@@ -1,8 +1,9 @@
 import ProfileLogic from "./ProfileLogic";
 import CommonMessage from "../../../helper/message/CommonMessage";
+import Spinner from "../../../components/spinner/Spinner";
 const Profile = () => {
   const {enter_name, submit, name, email, mobile, enter_email, enter_mobile} = CommonMessage;//Message
-  const {handleChange, Spinner, handleSubmit, formValues, errors, loader,formLoader} = ProfileLogic();//Logic
+  const {handleChange, handleSubmit, formValues, errors, loader,formLoader} = ProfileLogic();//Logic
   return (
     <>
       <div className="card shadow mb-4">
